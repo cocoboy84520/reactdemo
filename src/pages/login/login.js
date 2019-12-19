@@ -7,7 +7,8 @@ import {reqlogin} from '../../api'
 import {errormodal} from "../../utils/msg";
 
 const {Option} = Select;
-
+// require('@babel/plugin-proposal-decorators').default,
+//     { "legacy":true, },
 @withTranslation()
 class Login extends Component {
 
