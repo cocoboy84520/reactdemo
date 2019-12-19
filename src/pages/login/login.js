@@ -1,13 +1,18 @@
 import React, { Component, Text } from 'react'
-import { Form, Icon, Input, Button, Checkbox, Select } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Select } from 'antd'
+import { withTranslation } from 'react-i18next'
 import './login.less'
 import logo from './image/logo.png'
 
 const { Option } = Select;
+@withTranslation()
 class Login extends Component {
 
+
+    // 提交事件
     handleSubmit=(event)=>{
         event.preventDefault();
+        
         const form=this.props.form;
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -16,8 +21,13 @@ class Login extends Component {
         });
     }
 
+    //切换语言
+    changelang=(lang)=>{
+        this.props.i18n.changeLanguage(lang);
+    }
 
     render() {
+        const {t}=this.props;
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="login">
@@ -36,7 +46,7 @@ class Login extends Component {
                                     <Input
                                         size="large"
                                         prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                        placeholder="用户名"
+                                        placeholder={t('Welcome to React')}
                                     />,
                                 )}
                             </Form.Item>
@@ -66,8 +76,8 @@ class Login extends Component {
                     </div>
 
                     <div className="lang">
-                        <a style={{ margin: '0 20px' }}>简体中文(CN)</a>
-                        <a>日本语(JP)</a>
+                        <a onClick={()=>this.changelang('zh')} style={{ margin: '0 20px' }}>简体中文(CN)</a>
+                        <a onClick={()=>this.changelang('jp')}>日本语(JP)</a>
                     </div>
                 </div>
 
