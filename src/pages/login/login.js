@@ -1,7 +1,7 @@
 import React, {Component, Text} from 'react'
 import {Form, Icon, Input, Button, Checkbox, Select} from 'antd';
 import './login.less'
-import logo from './image/logo.png'
+import logo from '../../assets/images/logo.png'
 import {withTranslation} from 'react-i18next'
 import {reqlogin} from '../../api'
 import {errormodal} from "../../utils/msg";
@@ -21,7 +21,7 @@ class Login extends Component {
             if (!err) {
                 const {username, password} = values;
                 const response = await reqlogin(username, password);
-                if(response.data.status===1)
+                if(response.status===1)
                 {
                     errormodal(t('用户名或者密码错误'));
                 }else{
