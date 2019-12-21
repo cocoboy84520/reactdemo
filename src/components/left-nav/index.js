@@ -2,12 +2,14 @@ import React, {Component} from 'react'
 import {Link} from "react-router-dom"
 import {Menu, Icon} from 'antd'
 import menuList from "../../config/menuConfig";
+import {withTranslation} from 'react-i18next'
 
 import logo from '../../assets/images/logo.png'
 import './index.less'
 
 const {SubMenu} = Menu
-export default class Index extends Component {
+@withTranslation()
+class Index extends Component {
 
     getMenuNodes = (menuList) => {
         return menuList.map(item => {
@@ -16,7 +18,7 @@ export default class Index extends Component {
                     <Menu.Item key={item.key}>
                         <Link to={item.key}>
                             <Icon type={item.icon}/>
-                            <span>{item.title}</span>
+                            <span>{this.props.t(item.title)}</span>
                         </Link>
                     </Menu.Item>
                 )
@@ -27,7 +29,7 @@ export default class Index extends Component {
                         title={
                             <span>
                                 <Icon type={item.icon}/>
-                                <span>{item.title}</span>
+                                <span>{this.props.t(item.title)}</span>
                             </span>
                                 }
                     >
@@ -60,3 +62,5 @@ export default class Index extends Component {
         )
     }
 }
+
+export default Index

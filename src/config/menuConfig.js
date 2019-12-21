@@ -12,6 +12,10 @@ const menuList=[
         key:'/facilities',
         icon:'table',
     },{
+        title:'通知公告',
+        key:'/notice',
+        icon:'sound',
+    },{
         title:'共享文件',
         key:'/file',
         icon:'file',
