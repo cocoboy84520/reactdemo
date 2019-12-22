@@ -10,16 +10,16 @@ import File from "../file/file";
 import Flow from "../flow/flow";
 import './admin.less'
 import Notice from "../notice/notice";
-
+import Book from "../book/book";
 const { Header, Footer, Sider, Content } = Layout;
 export default class Admin extends Component {
     render() {
         return (
                 <Layout style={{height:'100%'}}>
                     <Sider className='sider'><LeftNav /></Sider>
-                    <Layout>
+                    <Layout className='layoutbody'>
                         <Header className='header'><HeaderNav /></Header>
-                        <Content style={{margin:'20px'}}>
+                        <Content className='content'>
                             <Switch>
                                 <Route path='/home' component={Home}></Route>
                                 <Route path='/calendar' component={Calendars}></Route>
@@ -27,12 +27,13 @@ export default class Admin extends Component {
                                 <Route path='/file' component={File}></Route>
                                 <Route path='/flow' component={Flow}></Route>
                                 <Route path='/notice' component={Notice}></Route>
+                                <Route path='/book' component={Book}></Route>
                                 <Redirect to='/home'/>
                             </Switch>
                         </Content>
-                        {/*<Footer className="footer">*/}
-                        {/*    康肯环保设备(平湖)有限公司*/}
-                        {/*</Footer>*/}
+                        <Footer className="footer">
+                            康肯环保设备(平湖)有限公司
+                        </Footer>
                     </Layout>
                 </Layout>
         )

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Link} from "react-router-dom"
+import {Link,withRouter} from "react-router-dom"
 import {Menu, Icon} from 'antd'
 import menuList from "../../config/menuConfig";
 import {withTranslation} from 'react-i18next'
@@ -9,9 +9,11 @@ import './index.less'
 
 const {SubMenu} = Menu
 @withTranslation()
+@withRouter
 class Index extends Component {
 
     getMenuNodes = (menuList) => {
+        const path=this.props.location.pathname;
         return menuList.map(item => {
             if (!item.children) {
                 return (
@@ -23,6 +25,11 @@ class Index extends Component {
                     </Menu.Item>
                 )
             } else {
+                const cItem=item.children.find(cItem=>cItem.key===path)
+
+                if(cItem){
+                    this.openKey=item.key
+                }
                 return (
                     <SubMenu
                         key={item.key}
@@ -41,8 +48,12 @@ class Index extends Component {
         })
     }
 
+    componentWillMount() {
+        this.menuNodes=this.getMenuNodes(menuList)
+    }
 
     render() {
+        const path=this.props.location.pathname;
         return (
             <div className="left-nav">
                 <Link to="/" className="left-nav-header">
@@ -50,13 +61,13 @@ class Index extends Component {
                     <h1>康肯环保</h1>
                 </Link>
                 <Menu
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
+                    selectedKeys={[path]}
+                    defaultOpenKeys={[this.openKey]}
                     mode="inline"
                     theme="dark"
                     // inlineCollapsed={this.state.collapsed}
                 >
-                    {this.getMenuNodes(menuList)}
+                    {this.menuNodes}
                 </Menu>
             </div>
         )

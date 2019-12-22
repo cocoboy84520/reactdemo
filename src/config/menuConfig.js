@@ -23,6 +23,20 @@ const menuList=[
         title:'流程审批',
         key:'/flow',
         icon:'usergroup-delete',
+    }, {
+        title:'常用工具',
+        key:'/tool',
+        icon:'tool',
+        children:[{
+            title:'快递查询',
+            key:'/express',
+            icon:'car'
+        },{
+            title: '内部通讯录',
+            key: '/book',
+            icon:'facebook'
+        }
+        ]
     },
 
 ]
