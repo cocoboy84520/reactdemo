@@ -61,7 +61,6 @@ class Index extends Component {
 
 
     render() {
-        debugger
         return (
             <PageHeader
                 style={{
