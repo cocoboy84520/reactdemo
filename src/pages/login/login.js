@@ -26,6 +26,7 @@ class Login extends Component {
                     errormodal(t('用户名或者密码错误'));
                 }else{
                     console.log('登录成功');
+                    this.props.history.replace('/')
                 }
             }
         });

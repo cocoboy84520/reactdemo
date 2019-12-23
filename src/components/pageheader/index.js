@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {PageHeader} from 'antd';
 import {Link, withRouter} from 'react-router-dom'
 import menuList from "../../config/menuConfig";
-
+import {connect} from 'react-redux'
 
 const itemRender = (route, params, routes, paths) => {
     const last = routes.indexOf(route) === routes.length - 1;
@@ -68,11 +68,16 @@ class Index extends Component {
                     backgroundColor: '#FFF',
                     margin: '-20px -20px 20px -20px'
                 }}
-                title={this.state.currpagename}
+                title={this.props.headTitle}
                 breadcrumb={{routes: this.routes, itemRender}}
             />
         )
     }
 }
 
-export default Index
+export default connect(
+    state=>({
+        headTitle:state.headTitle
+    }),
+    {}
+)(Index)

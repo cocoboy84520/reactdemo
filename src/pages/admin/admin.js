@@ -28,6 +28,7 @@ export default class Admin extends Component {
                                 <Route path='/flow' component={Flow}></Route>
                                 <Route path='/notice' component={Notice}></Route>
                                 <Route path='/book' component={Book}></Route>
+                                {/*<Route path='/editcalendar' component={Editcalendar}></Route>*/}
                                 <Redirect to='/home'/>
                             </Switch>
                         </Content>

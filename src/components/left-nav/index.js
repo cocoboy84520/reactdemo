@@ -3,7 +3,8 @@ import {Link,withRouter} from "react-router-dom"
 import {Menu, Icon} from 'antd'
 import menuList from "../../config/menuConfig";
 import {withTranslation} from 'react-i18next'
-
+import {connect} from 'react-redux'
+import {setHeadTitle} from '../../redux/actions'
 import logo from '../../assets/images/logo.png'
 import './index.less'
 
@@ -16,9 +17,13 @@ class Index extends Component {
         const path=this.props.location.pathname;
         return menuList.map(item => {
             if (!item.children) {
+                if(item.key===path||path.indexOf(item.key)===0)
+                {
+                    this.props.setHeadTitle(item.title)
+                }
                 return (
                     <Menu.Item key={item.key}>
-                        <Link to={item.key}>
+                        <Link to={item.key} onClick={()=>this.props.setHeadTitle(item.title)}>
                             <Icon type={item.icon}/>
                             <span>{this.props.t(item.title)}</span>
                         </Link>
@@ -74,4 +79,8 @@ class Index extends Component {
     }
 }
 
-export default Index
+export default connect(
+    state=>({
+
+    }),{setHeadTitle}
+)(Index)
