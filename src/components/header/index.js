@@ -34,12 +34,12 @@ class Index extends Component {
          return (
              <Menu>
                  <Menu.Item className='menuitem'>
-                     <a onClick={()=>this.changelang('zh')} rel="noopener noreferrer" href="#">
+                     <a onClick={()=>this.changelang('zh')}>
                          中文简体(zh-cn)
                      </a>
                  </Menu.Item>
                  <Menu.Item className='menuitem'>
-                     <a onClick={()=>this.changelang('jp')} rel="noopener noreferrer" href="#">
+                     <a onClick={()=>this.changelang('jp')}>
                          日本语(jp)
                      </a>
                  </Menu.Item>
@@ -53,6 +53,7 @@ class Index extends Component {
     }
 
     render() {
+         const {t}=this.props
         return (
             <div className='header-nav'>
                 <div className='header-nav-left'>
@@ -71,7 +72,7 @@ class Index extends Component {
                                     src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
                                     alt="avatar"/>
                                 <span>
-                            张新根
+                                    {t('张新根')}
                         </span>
                             </div>
                         </span>

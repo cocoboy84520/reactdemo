@@ -15,6 +15,7 @@ class Index extends Component {
 
     getMenuNodes = (menuList) => {
         const path=this.props.location.pathname;
+        console.log(this.props)
         return menuList.map(item => {
             if (!item.children) {
                 if(item.key===path||path.indexOf(item.key)===0)
@@ -53,11 +54,13 @@ class Index extends Component {
         })
     }
 
-    componentWillMount() {
-        this.menuNodes=this.getMenuNodes(menuList)
-    }
+
+
+
+
 
     render() {
+        debugger
         const path=this.props.location.pathname;
         return (
             <div className="left-nav">
@@ -72,7 +75,7 @@ class Index extends Component {
                     theme="dark"
                     // inlineCollapsed={this.state.collapsed}
                 >
-                    {this.menuNodes}
+                    {this.getMenuNodes(menuList)}
                 </Menu>
             </div>
         )

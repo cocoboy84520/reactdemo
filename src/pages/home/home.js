@@ -1,21 +1,23 @@
 import React, { Component } from 'react'
 import { Card, Col, Row,List,Skeleton  } from 'antd';
 import './home.less'
+import {withTranslation} from 'react-i18next'
 
 const data=['Racing car sprays burning fuel into crowd.',
     'Japanese princess to wed commoner.',
     'Australian walks 100km after outback crash.',
     'Man charged over missing wedding girl.',
     'Los Angeles battles huge wildfires.',];
-
-export default class Home extends Component {
+@withTranslation()
+class Home extends Component {
     render() {
+        const {t} =this.props
         return (
             <div className='home'>
                 <Row gutter={16}>
                     <Col span={4}>
                         <Card title="今日日程" bordered={false}>
-                            今日日程
+                            {t('今日日程')}
                         </Card>
                     </Col>
                     <Col span={4}>
@@ -64,3 +66,4 @@ export default class Home extends Component {
         )
     }
 }
+export default Home
