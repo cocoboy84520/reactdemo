@@ -52,5 +52,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://rap2api.taobao.org"
+  "proxy": "http://127.0.0.1:1065"
 }

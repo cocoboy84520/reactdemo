@@ -1,10 +1,12 @@
 
 
 import {combineReducers} from "redux";
-import {SET_HEAD_TITLE} from './action-type'
+import {RECEIVE_USER, SET_HEAD_TITLE} from './action-type'
 const initUser={}
 function user(state=initUser,action) {
     switch (action.type) {
+        case RECEIVE_USER:
+            return action.user
         default:
             return state
     }

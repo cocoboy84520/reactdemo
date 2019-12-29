@@ -1,11 +1,11 @@
 import React, {Component, Text} from 'react'
+import {Redirect} from 'react-router-dom'
 import {Form, Icon, Input, Button, Checkbox, Select} from 'antd';
 import './login.less'
 import logo from '../../assets/images/logo.png'
 import {withTranslation} from 'react-i18next'
-import {reqlogin} from '../../api'
-import {errormodal} from "../../utils/msg";
-
+import {connect} from 'react-redux'
+import {userlogin} from '../../redux/actions'
 const {Option} = Select;
 // require('@babel/plugin-proposal-decorators').default,
 //     { "legacy":true, },
@@ -20,14 +20,7 @@ class Login extends Component {
         this.props.form.validateFields(async (err, values) => {
             if (!err) {
                 const {username, password} = values;
-                const response = await reqlogin(username, password);
-                if(response.status===1)
-                {
-                    errormodal(t('用户名或者密码错误'));
-                }else{
-                    console.log('登录成功');
-                    this.props.history.replace('/')
-                }
+                this.props.userlogin(username,password)
             }
         });
     }
@@ -40,8 +33,13 @@ class Login extends Component {
 
 
     render() {
+
         const {t} = this.props;
         const {getFieldDecorator} = this.props.form;
+        const user=this.props.user
+        if(user &&user.id) {
+            return <Redirect to='/home'/>
+        }
         return (
             <div className="login">
                 <div className="login-frm">
@@ -101,4 +99,10 @@ class Login extends Component {
 }
 
 const WarpLogin = Form.create()(Login)
-export default WarpLogin
+export default connect(
+    status=>({
+        user:status.user
+    }),{
+        userlogin
+    }
+)(WarpLogin)

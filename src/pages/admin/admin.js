@@ -11,8 +11,10 @@ import Flow from "../flow/flow";
 import './admin.less'
 import Notice from "../notice/notice";
 import Book from "../book/book";
+import {connect} from "react-redux";
+
 const { Header, Footer, Sider, Content } = Layout;
-export default class Admin extends Component {
+ class Admin extends Component {
     render() {
         return (
                 <Layout style={{height:'100%'}}>
@@ -40,3 +42,6 @@ export default class Admin extends Component {
         )
     }
 }
+export default connect(
+    status=>({user:status.user}),{}
+)(Admin)
