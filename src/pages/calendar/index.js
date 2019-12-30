@@ -59,7 +59,7 @@ export default class Index extends React.Component {
         console.log(date.format('YYYY-MM-DD'))
         this.props.history.push({pathname:'/calendar/edit'})
     }
-
+//
     render() {
         debugger
         return (
