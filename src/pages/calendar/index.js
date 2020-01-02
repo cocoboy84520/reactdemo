@@ -61,7 +61,6 @@ export default class Index extends React.Component {
     }
 //
     render() {
-        debugger
         return (
             <div >
                 <PageHead />

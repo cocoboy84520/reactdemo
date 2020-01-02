@@ -5,7 +5,6 @@ import Editcalendar from "./editcalendar";
 export default class Calendars extends Component{
 //
     render() {
-        debugger
         return (
             <Switch>
                 <Route path='/calendar' component={Index} exact/> {/*路径完全匹配*/}

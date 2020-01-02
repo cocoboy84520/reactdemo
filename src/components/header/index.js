@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import './index.less'
 import {Icon, Menu, Dropdown,} from 'antd'
+import {connect} from 'react-redux'
 import {withTranslation} from 'react-i18next'
+import {userlogin} from "../../redux/actions";
 const usermenu = (
     <Menu>
         <Menu.Item className='menuitem'>
@@ -72,7 +74,7 @@ class Index extends Component {
                                     src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
                                     alt="avatar"/>
                                 <span>
-                                    {t('张新根')}
+                                    {this.props.user.username}
                         </span>
                             </div>
                         </span>
@@ -90,4 +92,6 @@ class Index extends Component {
         )
     }
 }
-export default  Index
+export default connect(
+    status=>({user:status.user}),{}
+)(Index)

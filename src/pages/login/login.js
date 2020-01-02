@@ -33,7 +33,6 @@ class Login extends Component {
 
 
     render() {
-
         const {t} = this.props;
         const {getFieldDecorator} = this.props.form;
         const user=this.props.user

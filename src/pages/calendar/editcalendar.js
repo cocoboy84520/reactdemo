@@ -3,6 +3,7 @@ import {Form, Select, Input, Button,DatePicker,TimePicker,Checkbox,Radio,Transfe
 import './editcalendar.less'
 import PageHead from '../../components/pageheader'
 import moment from "moment";
+import {connect} from "react-redux";
 const { Option , OptGroup} = Select;
 class Editcalendar extends Component {
 
@@ -21,13 +22,17 @@ class Editcalendar extends Component {
     handleSubmit=event=>{
         event.preventDefault();
         this.props.form.validateFields(async (err, values) => {
+            if(!err)
+            {
+                const {}=values
+            }
             console.log(values)
         })
     }
 //
     render() {
         const { getFieldDecorator } = this.props.form;
-
+debugger
         return (
             <div className='editcalendar'>
                 <PageHead />
@@ -35,8 +40,9 @@ class Editcalendar extends Component {
                     <Form  labelCol={{ span: 8 }} wrapperCol={{ span: 8, }} onSubmit={this.handleSubmit} >
                         <Form.Item wrapperCol={{ span: 2, }} label="姓名">
                             {getFieldDecorator('name', {
-                                rules:[{required:true,message:'请填写姓名'}]
-                            })(<Input />)}
+                                rules:[{required:true,message:'请填写姓名'}],
+                                initialValue:this.props.user.name
+                            })(<Input disabled={true} />)}
                         </Form.Item>
                         <Form.Item label="开始时间">
                             {getFieldDecorator('startdate', {
@@ -118,4 +124,6 @@ class Editcalendar extends Component {
     }
 }
 const WarpEditcalendar = Form.create()(Editcalendar)
-export default WarpEditcalendar
+export default connect(
+    status=>({user:status.user}),{}
+)(WarpEditcalendar)

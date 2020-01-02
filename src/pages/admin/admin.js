@@ -16,6 +16,11 @@ import {connect} from "react-redux";
 const { Header, Footer, Sider, Content } = Layout;
  class Admin extends Component {
     render() {
+        const user=this.props.user
+        if(!user||!user.id)
+        {
+            return <Redirect to='/login' />
+        }
         return (
                 <Layout style={{height:'100%'}}>
                     <Sider className='sider'><LeftNav /></Sider>

@@ -60,7 +60,6 @@ class Index extends Component {
 
 
     render() {
-        debugger
         const path=this.props.location.pathname;
         return (
             <div className="left-nav">
