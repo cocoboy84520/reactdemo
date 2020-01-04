@@ -4,6 +4,8 @@ import './editcalendar.less'
 import PageHead from '../../components/pageheader'
 import moment from "moment";
 import {connect} from "react-redux";
+import WrapedCheckBox from "../../components/wrapedcheckbox";
+import {calendaradd} from '../../api'
 const { Option , OptGroup} = Select;
 class Editcalendar extends Component {
 
@@ -11,11 +13,19 @@ class Editcalendar extends Component {
         super(props);
         this.state={
             istime:false,
+            ismsg:true,
         }
     }
 
+
+    onUseableCheckedChange=()=>{
+        this.setState({ismsg:!this.state.ismsg})
+    }
+
     appointtime=(e)=>{
-        console.log(e)
+        console.log(this.props)
+        this.props.form.setFieldsValue({'starttime': moment('00:00', 'HH:mm')})
+        this.props.form.setFieldsValue({'endtime': moment('00:00', 'HH:mm')})
         this.setState({istime:e.target.checked})
     }
 
@@ -24,7 +34,8 @@ class Editcalendar extends Component {
         this.props.form.validateFields(async (err, values) => {
             if(!err)
             {
-                const {}=values
+                const {name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg}=values
+                const result=calendaradd(name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg)
             }
             console.log(values)
         })
@@ -108,7 +119,8 @@ debugger
                         </Form.Item>
                         <Form.Item label="通知">
                             {getFieldDecorator('ismsg', {
-                            })(<Checkbox checked={false}>发送通知</Checkbox>)}
+                                initialValue:this.state.ismsg
+                            })(<WrapedCheckBox text='发送通知' onChange={this.onUseableCheckedChange}/>)}
                         </Form.Item>
                         <Form.Item wrapperCol={{ span: 8, offset: 11 }}>
                             <Button htmlType="submit" type="primary" htmlType="submit">
