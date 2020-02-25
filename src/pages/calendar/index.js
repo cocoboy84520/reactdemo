@@ -5,41 +5,48 @@ import locale from '../../locale/zh'
 import { Calendar,Badge} from 'antd';
 import {reqgetcalendar, reqlogin} from "../../api";
 import {Link} from "react-router-dom";
-
+import addbtnimg from '../../assets/images/addcalendar.png';
+import Loading from "../../components/loading";
+import moment from "moment";
 export default class Index extends React.Component {
 
     constructor(props) {
         super(props);
+        var now = moment().locale('zh-cn').format('YYYY-MM-DD');
+        console.log(now)
         this.state={
             daydata:[],
+            loading:true,
+            date:moment(now)
         }
     }
 
-    async componentWillMount() {
-        const response = await reqgetcalendar('', '');
-        this.setState({daydata:response.data})
+    async componentDidMount() {
+        const response = await reqgetcalendar('');
+        this.setState({daydata:response.data,loading:false})
     }
-    onPanelChange=(date,model)=>{
-        console.log(date.format('M'));
-        console.log(model);
+    onPanelChange= async (date,model)=>{
+        this.setState({loading:true,date:date})
+        const response = await reqgetcalendar(date.format('YYYY-MM-DD'));
+        this.setState({daydata:response.data,loading:false})
     }
 
     dateCellRender=(date)=>{
         const weekday=date.format('d')
         const finddata=date.format('YYYY-MM-DD');
         const daydate=this.state.daydata;
-        const cItem=daydate.find(cItem=>cItem.date==finddata)
-
+        const cItem=daydate[finddata];
         if(cItem)
         {
             const vacation=cItem.vacation||date.format('d')==6||date.format('d')==0
             return (
                 <div style={{width:'100%',height:'100%'}}>
                     {vacation&&<span className='vacation'>休</span>}
+                        <Link to={{pathname:'/calendar/add',state:{currdate:finddata}}} ><img src={addbtnimg} className="addbtn"/></Link>
                     <ul className="events">
-                        {cItem.list.map(item => (
-                            <li key={item.title}>
-                                <Badge color={item.color} status='default' text={item.title} />
+                        {cItem.map(item => (
+                            <li key={item.id}>
+                                <Link to={{pathname:'/calendar/edit',state:{data:item}}}><p className="title" style={{"WebkitBoxOrient": "vertical",color:item.titlecolor,marginBottom:0}}>{item.title}</p></Link>
                             </li>
                         ))}
                     </ul>
@@ -50,23 +57,29 @@ export default class Index extends React.Component {
             return (
                 <div style={{width:'100%',height:'100%'}}>
                     {vacation&&<span className='vacation'>休</span>}
+                    <Link to={{pathname:'/calendar/add',state:{currdate:finddata}}} ><img src={addbtnimg} className="addbtn"/></Link>
                 </div>
             )
         }
     }
 
-    onSelect=(date)=>{
-        console.log(date.format('YYYY-MM-DD'))
-        this.props.history.push({pathname:'/calendar/edit'})
-    }
+    // onAdd=(date)=>{
+    //     this.props.history.push({pathname:'',state:{currdate:date.format('YYYY-MM-DD')}})
+    // }
 //
     render() {
-        return (
-            <div >
-                <PageHead />
-                <Calendar onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender} className='calendar' locale={locale}/>
-            </div>
-        );
+        if(this.state.loading)
+        {
+            return(<Loading />)
+        }else{
+            return (
+                <div >
+                    <PageHead />
+                    <Calendar value={this.state.date} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender} className='calendar' locale={locale}/>
+                </div>
+            );
+        }
+
     }
 
 }

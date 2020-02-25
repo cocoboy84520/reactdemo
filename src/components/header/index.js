@@ -3,7 +3,7 @@ import './index.less'
 import {Icon, Menu, Dropdown,} from 'antd'
 import {connect} from 'react-redux'
 import {withTranslation} from 'react-i18next'
-import {userlogin} from "../../redux/actions";
+
 const usermenu = (
     <Menu>
         <Menu.Item className='menuitem'>

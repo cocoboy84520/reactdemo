@@ -3,9 +3,23 @@
  */
 import axios from 'axios'
 import {message} from "antd";
+import store from "../redux/store";
 
+export default  function ajax(url,data={},type='GET') {
 
-export default function ajax(url,data={},type='GET') {
+    //添加一个请求拦截器
+    axios.interceptors.request.use(function (config) {
+        const {user}=store.getState();
+        console.log(user)
+        config.headers.common['Token'] = user.id;
+        debugger
+        return config;
+    }, function (error) {
+        // Do something with request error
+        console.info("error: ");
+        console.info(error);
+        return Promise.reject(error);
+    });
     return new Promise((resolve, reject) => {
         let promise
         if (type==='GET')
@@ -20,6 +34,4 @@ export default function ajax(url,data={},type='GET') {
             message.error('网络请求错误：'+error.message)
         })
     });
-
-
 }

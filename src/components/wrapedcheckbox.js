@@ -4,9 +4,8 @@ import {Checkbox} from "antd";
 class WrapedCheckBox extends Component {
 
     render() {
-        debugger
         let status = false;
-        if (this.props.value === true || this.props.value === 'true') status=true;
+        if (this.props.value === true || this.props.value == '1') status=true;
         return (
             <Checkbox
                 checked={status}

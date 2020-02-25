@@ -14,7 +14,8 @@ export const userlogin=(username,password)=>{
         {
             const user=result.data
             //设置默认的header，用于验证用户登录信息
-            axios.defaults.headers.common['Authorization']=user.id
+            //axios.defaults.headers.common['Token']=user.id
+            window.sessionStorage.setItem('token',user.id)
             dispatch(receiveUser(user))
         }else{
             errormodal(result.msg)
