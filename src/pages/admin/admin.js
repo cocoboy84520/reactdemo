@@ -8,6 +8,7 @@ import Calendars from "../calendar/calendars";
 import Facilities from "../facilities/facilities";
 import File from "../file/file";
 import Flow from "../flow/flow";
+import Flowadmin from '../flow/admin/flowadmin'
 import './admin.less'
 import Notice from "../notice/notice";
 import Book from "../book/book";
@@ -32,7 +33,8 @@ const { Header, Footer, Sider, Content } = Layout;
                                 <Route path='/calendar' component={Calendars}></Route>
                                 <Route path='/facilities' component={Facilities}></Route>
                                 <Route path='/file' component={File}></Route>
-                                <Route path='/flow' component={Flow}></Route>
+                                <Route path='/newflow' component={Flow}></Route>
+                                <Route path='/flowadmin' component={Flowadmin}></Route>
                                 <Route path='/notice' component={Notice}></Route>
                                 <Route path='/book' component={Book}></Route>
                                 {/*<Route path='/editcalendar' component={Editcalendar}></Route>*/}

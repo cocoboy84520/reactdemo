@@ -23,3 +23,15 @@ export const getcalendardetail=(id)=>ajax('/?s=Calendar.getdetail',{id},'POST')
 
 
 export const getuserlist=()=>ajax('/?s=User.getuser',{},'POST')
+
+//添加公告
+export const addnotice=(title,titlecolor,type,content,files)=>ajax('/?s=Notice.add',{title,titlecolor,type,content,files},'POST')
+
+//显示公告
+export const noticelist=()=>ajax('/?s=Notice.querylist',{},'POST')
+
+//删除公告
+export const noticedel=(id)=>ajax('/?s=Notice.del',{id},'POST')
+
+//获取流程列表
+export const workflowlist=()=>ajax('/?s=Workflow.querylist',{},'POST')

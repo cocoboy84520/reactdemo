@@ -1,37 +1,45 @@
-import React, {Component} from 'react'
-import {Form, Row, Col, Button, Icon, Input, Table, DatePicker, Modal, message} from "antd";
-
-import './notice.less'
-import PageHead from "../../components/pageheader";
+import React, { Component } from 'react'
+import PageHead from '../../../components/pageheader/index'
+import {Button, Col, DatePicker, Form, Input, Row, Table} from "antd";
 import {connect} from "react-redux";
-import {calendardel, noticedel, noticelist} from "../../api";
-
+import {workflowlist} from "../../../api";
+import {Link} from "react-router-dom";
 const ButtonGroup = Button.Group;
+
 const columns = [
     {
-        title: '编号',
-        dataIndex: 'id',
+        title: '流程ID',
+        dataIndex: 'wf_uid',
         width: 100,
 
     },
     {
-        title: '类型',
-        dataIndex: 'type',
+        title: '流程名称',
+        dataIndex: 'wf_name',
         width: 100
     },
     {
-        title: '标题',
-        dataIndex: 'title',
-        render: (text, record, index) => {
-            return <a style={{color: record.titlecolor}}>{text}</a>
-        }
+        title: '创建时间',
+        dataIndex: 'wf_createtime',
+        width: 100
     },
+    {
+        title: '创建人',
+        dataIndex: 'wf_createuser',
+        width: 100
+    },
+    {
+        title:'操作',
+        width:100,
+        dataIndex:'wf_uid',
+        render: (text, record, index) => {
+            return <Link to={{pathname:'/flowadmin/flowdesign',state:{wf_uid:1}}} >流程设计</Link>
+        }
+    }
+
 ];
 
-
-class Index extends Component {
-
-
+ class Default extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -42,93 +50,19 @@ class Index extends Component {
         }
     }
 
-    async componentDidMount() {
+     componentDidMount() {
         this.loaddata()
-    }
+     }
 
-   async loaddata()
-    {
-        const {title,content,createtime}=this.props.form.getFieldsValue()
-        try {
-            const ret = await noticelist()
-            this.setState({data: ret.data.list, loading: false})
+     async loaddata(){
+        try{
+            const ret=await workflowlist()
+            this.setState({data:ret.data.list,loading:false})
         }catch (e) {
-            message.error(e.message)
+
         }
-    }
+     }
 
-
-    onSelectChange = selectedRowKeys => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({selectedRowKeys});
-    };
-
-
-    onDateChange=(date,datestring)=>{
-        this.setState({rangdate:datestring})
-    }
-
-    getFields() {
-        const count = this.state.expand ? 10 : 6;
-        const {getFieldDecorator} = this.props.form;
-        const children = [];
-        for (let i = 0; i < 10; i++) {
-            children.push(
-                <Col span={8} key={i} style={{display: i < count ? 'block' : 'none'}}>
-                    <Form.Item label={`Field ${i}`}>
-                        {getFieldDecorator(`field-${i}`, {
-                            rules: [
-                                {
-                                    required: true,
-                                    message: 'Input something!',
-                                },
-                            ],
-                        })(<Input placeholder="placeholder"/>)}
-                    </Form.Item>
-                </Col>,
-            );
-        }
-        return children;
-    }
-
-    handleSearch = e => {
-        e.preventDefault();
-        console.log(this.props.form.getFieldsValue());
-    };
-
-    handleReset = () => {
-        this.props.form.resetFields();
-    };
-
-
-    add = () => {
-        this.props.history.push('/notice/add')
-    }
-
-    del = () => {
-        if (this.state.selectedRowKeys.length > 0) {
-            Modal.confirm({
-                title: 'Confirm',
-                content: '确定要删除这个通知?',
-                okText: '确认',
-                cancelText: '取消',
-                onOk: async () => {
-                    try {
-                        const result = await noticedel(this.state.selectedRowKeys)
-                        this.loaddata()
-                    } catch (e) {
-                        message.error(e.message)
-                    }
-                }
-            });
-        } else {
-            message.error('请先选中要删除的行')
-        }
-    }
-
-    edit = (key) => {
-        this.props.history.push('/notice/edit')
-    }
 
     render() {
         const {selectedRowKeys} = this.state;
@@ -192,9 +126,8 @@ class Index extends Component {
         )
     }
 }
-
-const NoticeForm = Form.create()(Index)
+const DefaultForm = Form.create()(Default)
 
 export default connect(
     status => ({user: status.user}), {}
-)(NoticeForm)
+)(DefaultForm)

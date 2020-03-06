@@ -16,5 +16,4 @@ export default class Calendars extends Component{
             </Switch>
         )
     }
-
 }
