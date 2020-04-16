@@ -1,68 +1,153 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import PageHead from '../../../components/pageheader/index'
-import {Button, Col, DatePicker, Form, Input, Row, Table} from "antd";
+import {Button, Col, DatePicker, Form, Input, message, Modal, Row, Table} from "antd";
 import {connect} from "react-redux";
-import {workflowlist} from "../../../api";
+import {addflow, workflowlist} from "../../../api";
 import {Link} from "react-router-dom";
+
 const ButtonGroup = Button.Group;
 
 const columns = [
     {
         title: '流程ID',
-        dataIndex: 'wf_uid',
+        dataIndex: 'id',
         width: 100,
 
     },
     {
+        title: '流程分类',
+        dataIndex: 'type',
+        width: 100
+    },
+    {
         title: '流程名称',
-        dataIndex: 'wf_name',
+        dataIndex: 'flow_name',
         width: 100
     },
     {
-        title: '创建时间',
-        dataIndex: 'wf_createtime',
+        title: '流程描述',
+        dataIndex: 'flow_desc',
         width: 100
     },
     {
-        title: '创建人',
-        dataIndex: 'wf_createuser',
+        title: '状态',
+        dataIndex: 'status',
         width: 100
     },
     {
-        title:'操作',
-        width:100,
-        dataIndex:'wf_uid',
+        title: '创建者',
+        dataIndex: 'uid',
+        width: 100
+    },
+    {
+        title: '操作',
+        width: 100,
+        dataIndex: 'id',
         render: (text, record, index) => {
-            return <Link to={{pathname:'/flowadmin/flowdesign',state:{wf_uid:1}}} >流程设计</Link>
+            return (
+                <div>
+                    <Link to={{pathname: '/flowadmin/flowdesign', state: {flowid: text}}}>流程设计</Link>
+                    <Link style={{marginLeft:20
+                    }} to={{pathname: '/flowadmin/formdesign', state: {flowid: text}}}>表单设计</Link>
+                </div>
+
+            )
         }
     }
 
 ];
 
- class Default extends Component {
+// 添加流程form
+const AddFlowForm = Form.create({ name: 'form_in_modal' })(
+    // eslint-disable-next-line
+    class extends React.Component {
+        render() {
+            const { visible, onCancel, onCreate, form } = this.props;
+            const { getFieldDecorator } = form;
+            return (
+                <Modal
+                    title="添加流程"
+                    visible={visible}
+                    onCancel={onCancel}
+                    onOk={onCreate}
+                >
+                    <Form>
+                        <Form.Item label="流程分类">
+                            {getFieldDecorator('type', {
+                                rules: [{ required: true, message: '请选择流程分类' }],
+                            })(<Input />)}
+                        </Form.Item>
+                        <Form.Item label="流程名称">
+                            {getFieldDecorator('flowname',{
+                                rules: [{ required: true, message: '请输入流程名称' }],
+                            })(<Input/>)}
+                        </Form.Item>
+                        <Form.Item label="流程描述">
+                            {getFieldDecorator('flowdesc')(<Input type="textarea" />)}
+                        </Form.Item>
+                    </Form>
+                </Modal>
+            );
+        }
+    },
+);
+class Default extends Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedRowKeys: [],
             data: [],
             loading: true,
-            rangdate:[],
+            rangdate: [],
+            modalvisible: false,
         }
     }
 
-     componentDidMount() {
+    componentDidMount() {
         this.loaddata()
-     }
+    }
 
-     async loaddata(){
-        try{
-            const ret=await workflowlist()
-            this.setState({data:ret.data.list,loading:false})
-        }catch (e) {
+    async loaddata() {
+        try {
+            const ret = await workflowlist()
+            this.setState({data: ret.data.list, loading: false})
+        } catch (e) {
 
         }
-     }
+    }
 
+
+    add = () => {
+       this.setState({modalvisible:true})
+    }
+
+    handleCancel=()=>{
+        this.setState({modalvisible:false})
+    }
+
+    handleCreate = () => {
+        const { form } = this.formRef.props;
+        form.validateFields(async(err, values) => {
+            if (err) {
+                return;
+            }
+            const {type,flowname,flowdesc}=values
+            let ret=await addflow(type,flowname,flowdesc)
+            if(ret.ret===200)
+            {
+                form.resetFields();
+                this.setState({ modalvisible: false });
+                this.loaddata()
+            }else {
+                message.error(ret.msg)
+            }
+
+        });
+    };
+
+    saveFormRef = formRef => {
+        this.formRef = formRef;
+    };
 
     render() {
         const {selectedRowKeys} = this.state;
@@ -74,6 +159,12 @@ const columns = [
         const {getFieldDecorator} = this.props.form;
         return (
             <div>
+                <AddFlowForm
+                    wrappedComponentRef={this.saveFormRef}
+                    visible={this.state.modalvisible}
+                    onCancel={this.handleCancel}
+                    onCreate={this.handleCreate}
+                />
                 <PageHead/>
                 <Form className="ant-advanced-search-form" onSubmit={this.handleSearch}>
                     <Row gutter={24}>
@@ -94,7 +185,8 @@ const columns = [
                         </Col>
                         <Col span={5}>
                             <Form.Item label='创建时间'>
-                                {getFieldDecorator('startdate', {})(<DatePicker.RangePicker format='YYYY-MM-DD' onChange={this.onDateChange}/>)}
+                                {getFieldDecorator('startdate', {})(<DatePicker.RangePicker format='YYYY-MM-DD'
+                                                                                            onChange={this.onDateChange}/>)}
                             </Form.Item>
                         </Col>
                         <Col span={3} style={{textAlign: 'right'}}>
@@ -116,8 +208,9 @@ const columns = [
                         </ButtonGroup>
 
                     </div>
-                    <div style={{paddingLeft:20,paddingRight:20}}>
-                        <Table rowKey={'id'} style={{backgroundColor: '#FFF'}} size='middle ' rowSelection={rowSelection}
+                    <div style={{paddingLeft: 20, paddingRight: 20}}>
+                        <Table rowKey={'id'} style={{backgroundColor: '#FFF'}} size='middle '
+                               rowSelection={rowSelection}
                                loading={this.state.loading} columns={columns} dataSource={this.state.data}/>
                     </div>
 
@@ -126,6 +219,7 @@ const columns = [
         )
     }
 }
+
 const DefaultForm = Form.create()(Default)
 
 export default connect(

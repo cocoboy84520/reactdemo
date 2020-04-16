@@ -24,9 +24,13 @@ const menuList = [
         key: '/flow',
         icon: 'usergroup-delete',
         children: [{
-            title: '新建流程',
+            title: '新建申请',
             key: '/newflow',
             icon:'plus-circle'
+        }, {
+            title: '申请列表',
+            key: '/myflow',
+            icon:'key'
         }, {
             title: '流程管理',
             key: '/flowadmin',

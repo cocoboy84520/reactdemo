@@ -35,3 +35,39 @@ export const noticedel=(id)=>ajax('/?s=Notice.del',{id},'POST')
 
 //获取流程列表
 export const workflowlist=()=>ajax('/?s=Workflow.querylist',{},'POST')
+
+//添加流程步骤
+export const addprocess=(flowid,processid)=>ajax('/?s=Workflow.addprocess',{flowid,processid},'POST')
+
+//添加流程
+export const addflow=(type,flowname,flowdesc)=>ajax('/?s=Workflow.addflow',{type,flowname,flowdesc},'POST')
+
+//删除流程步骤
+export const delprocess=(flowid,processid)=>ajax('/?s=Workflow.delprocess',{flowid,processid},'POST')
+
+//保存流程设计图
+export const save_canvas=(data,flowid)=>ajax('/?s=Workflow.savecanvas',{data,flowid},'POST')
+
+//获取流程设计图
+export const get_canvas=(flowid)=>ajax('/?s=Workflow.getcanvas',{flowid},'POST')
+
+//保存步骤属性
+export const save_processarrt=(processid,process_type,is_sing,is_back,auto_person,auto_sponsor_ids)=>ajax('/?s=Workflow.saveprocessarrt',{processid,process_type,is_sing,is_back,auto_person,auto_sponsor_ids},'POST')
+
+//读取步骤属性值
+export const get_processarrt=(processid)=>ajax('/?s=Workflow.getprocessattr',{processid},'POST')
+
+//保存表单设计
+export const save_formdesign=(flowid,designid,data)=>ajax('/?s=Workflow.saveformdesign',{flowid,designid,data},'POST')
+
+//读取表单设计
+export const get_formdesign=(flowid)=>ajax('/?s=Workflow.getformdesign',{flowid},'POST')
+
+//获取流程列表
+export const get_flowlist=()=>ajax('/?s=Workflow.getflowlist',{},'POST')
+
+//发起流程
+export const startflow=(flowdata,flowid)=>ajax('/?s=Workflow.startflow',{flowdata,flowid},'POST')
+
+//获取我的申请
+export const getmyflow=()=>ajax('/?s=Workflow.myflow',{},'POST')

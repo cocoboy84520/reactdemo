@@ -1,6 +1,6 @@
 import React, {Component, Text} from 'react'
 import {Redirect} from 'react-router-dom'
-import {Form, Icon, Input, Button, Checkbox, Select} from 'antd';
+import {Form, Icon, Input, Button, Checkbox, Select,Spin} from 'antd';
 import './login.less'
 import logo from '../../assets/images/logo.png'
 import {withTranslation} from 'react-i18next'
@@ -11,6 +11,12 @@ const {Option} = Select;
 //     { "legacy":true, },
 @withTranslation()
 class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state={
+            isloading:false,
+        }
+    }
 
     handleSubmit = (event) => {
         const {t} = this.props;
@@ -19,6 +25,7 @@ class Login extends Component {
         const form = this.props.form;
         this.props.form.validateFields(async (err, values) => {
             if (!err) {
+                this.setState({isloading:true})
                 const {username, password} = values;
                 this.props.userlogin(username,password)
             }
@@ -90,6 +97,7 @@ class Login extends Component {
                         <a onClick={() => this.changelang('zh')} style={{margin: '0 20px'}}>简体中文(CN)</a>
                         <a onClick={() => this.changelang('jp')}>日本语(JP)</a>
                     </div>
+                    {this.state.isloading&&<Spin size="large" />}
                 </div>
 
             </div>

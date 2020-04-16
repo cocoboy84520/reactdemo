@@ -12,6 +12,7 @@ import Flowadmin from '../flow/admin/flowadmin'
 import './admin.less'
 import Notice from "../notice/notice";
 import Book from "../book/book";
+import  Myflow from "../flow/myflow"
 import {connect} from "react-redux";
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -35,6 +36,7 @@ const { Header, Footer, Sider, Content } = Layout;
                                 <Route path='/file' component={File}></Route>
                                 <Route path='/newflow' component={Flow}></Route>
                                 <Route path='/flowadmin' component={Flowadmin}></Route>
+                                <Route path='/myflow' component={Myflow}></Route>
                                 <Route path='/notice' component={Notice}></Route>
                                 <Route path='/book' component={Book}></Route>
                                 {/*<Route path='/editcalendar' component={Editcalendar}></Route>*/}
