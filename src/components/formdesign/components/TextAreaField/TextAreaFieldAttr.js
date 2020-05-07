@@ -104,6 +104,19 @@ export default class TextAreaFieldAttr extends PureComponent {
                 </Checkbox>
               </label>
             </div>
+            <div className="wf-setter-field wf-setting-required">
+              <div className="fieldname">验证</div>
+              <label className="fieldblock">
+                <Checkbox
+                    checked={verifyValue}
+                    onChange={e => {
+                      this.handleChange({ verifyValue: e.target.checked });
+                    }}
+                >
+                  （必填）
+                </Checkbox>
+              </label>
+            </div>
           </div>
         </div>
       </div>

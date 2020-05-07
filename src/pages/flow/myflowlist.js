@@ -22,7 +22,7 @@ const columns = [
         dataIndex: 'No',
         width: 100,
         render:(text,record,index)=>{
-            return <Link to={{pathname: '/myflow/flowview', state: {flowid: text}}}>{text}</Link>
+            return <Link to={{pathname: '/myflow/flowview', state: {wf_id: record.id}}}>{text}</Link>
         }
 
     },
@@ -31,7 +31,7 @@ const columns = [
         dataIndex: 'new_title',
         width: 200,
         render:(text,record,index)=>{
-            return <Link to={{pathname: '/myflow/flowview', state: {flowid: text}}}>{text}</Link>
+            return <Link to={{pathname: '/myflow/flowview', state: {wf_id: record.id}}}>{text}</Link>
         }
     },
     {
@@ -103,7 +103,7 @@ class Myflowlist extends Component {
         try {
             const myflow = await getmyflow()
             console.log(myflow)
-            this.setState({data: myflow.data, loading: false})
+            this.setState({data: myflow.data.list, loading: false})
         } catch (e) {
             message.error(e.message)
         }
@@ -120,7 +120,7 @@ class Myflowlist extends Component {
         this.setState({rangdate: datestring})
     }
 
-    
+
 
     handleSearch = e => {
         e.preventDefault();

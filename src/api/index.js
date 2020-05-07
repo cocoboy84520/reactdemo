@@ -71,3 +71,9 @@ export const startflow=(flowdata,flowid)=>ajax('/?s=Workflow.startflow',{flowdat
 
 //获取我的申请
 export const getmyflow=()=>ajax('/?s=Workflow.myflow',{},'POST')
+
+//获取申请详情
+export const getflowdetail=(wf_id)=>ajax('/?s=Workflow.flowdetail',{wf_id},'POST')
+
+//流程审批
+export const dochecksave=(wf_fid,submit_to_save,remark)=>ajax('/?s=Workflow.do_check_save',{wf_fid,submit_to_save,remark},'POST')

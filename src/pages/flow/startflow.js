@@ -35,10 +35,13 @@ class FormShow extends Component {
         let fileList = e.fileList;
         let aaa = fileList.filter(file => {
             console.log(file)
+            debugger
             if(file.response)
             {
                 if(file.response.ret==200)
                 {
+                    debugger
+                    file.url=file.response.data.url
                     return true
                 }else {
                     message.error(`文件上传错误:${file.response.msg}`)
@@ -145,7 +148,7 @@ class FormShow extends Component {
                                     {getFieldDecorator('files', {
                                         valuePropName:'fileList',
                                         getValueFromEvent: this.normFile
-                                    })(<Upload {...props} fileList={this.state.fileList}
+                                    })(<Upload showUploadList={{showRemoveIcon:true,showDownloadIcon:false}} {...props} fileList={this.state.fileList}
                                     >
                                         <Button>
                                             <Icon type="upload"/> 上传
