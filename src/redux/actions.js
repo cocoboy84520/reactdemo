@@ -1,5 +1,5 @@
-import {RECEIVE_USER, SET_HEAD_TITLE} from "./action-type";
-import {reqlogin} from '../api'
+import {RECEIVE_USER, SET_HEAD_TITLE,LOGOUT} from "./action-type";
+import {loginwithwx, reqlogin} from '../api'
 import {errormodal} from "../utils/msg";
 
 import axios from "axios"
@@ -22,3 +22,22 @@ export const userlogin=(username,password)=>{
         }
     }
 }
+
+export const wxlogin=(code)=>{
+    return async  dispatch=>{
+        const  result=await loginwithwx(code)
+        if(result.ret===200)
+        {
+            const user=result.data
+            window.sessionStorage.setItem('token',user.id)
+            dispatch(receiveUser(user))
+        }else{
+            errormodal(result.msg)
+        }
+    }
+}
+
+
+export const logout=()=>({
+    type:LOGOUT
+})

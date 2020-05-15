@@ -14,7 +14,9 @@ import Notice from "../notice/notice";
 import Book from "../book/book";
 import  Myflow from "../flow/myflow"
 import {connect} from "react-redux";
-
+import User from "../user/user";
+import Account from '../account/index'
+import Bingresult from "../account/bingresult";
 const { Header, Footer, Sider, Content } = Layout;
  class Admin extends Component {
     render() {
@@ -27,7 +29,7 @@ const { Header, Footer, Sider, Content } = Layout;
                 <Layout style={{height:'100%'}}>
                     <Sider className='sider'><LeftNav /></Sider>
                     <Layout className='layoutbody'>
-                        <Header className='header'><HeaderNav /></Header>
+                        <Header className='header'><HeaderNav {...this.props} /></Header>
                         <Content className='content'>
                             <Switch>
                                 <Route path='/home' component={Home}></Route>
@@ -39,6 +41,9 @@ const { Header, Footer, Sider, Content } = Layout;
                                 <Route path='/myflow' component={Myflow}></Route>
                                 <Route path='/notice' component={Notice}></Route>
                                 <Route path='/book' component={Book}></Route>
+                                <Route path='/user' component={User}></Route>
+                                <Route path='/account' component={Account}></Route>
+                                <Route path='/bingresult' component={Bingresult}></Route>
                                 {/*<Route path='/editcalendar' component={Editcalendar}></Route>*/}
                                 <Redirect to='/home'/>
                             </Switch>

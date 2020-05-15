@@ -26,15 +26,15 @@ const menuList = [
         children: [{
             title: '新建申请',
             key: '/newflow',
-            icon:'plus-circle'
+            icon: 'plus-circle'
         }, {
             title: '申请列表',
             key: '/myflow',
-            icon:'key'
+            icon: 'key'
         }, {
             title: '流程管理',
             key: '/flowadmin',
-            icon:'key'
+            icon: 'key'
         }
         ]
     }, {
@@ -49,6 +49,17 @@ const menuList = [
             title: '内部通讯录',
             key: '/book',
             icon: 'facebook'
+        }
+        ]
+    },
+    {
+        title: '系统配置',
+        key: '/system',
+        icon: 'setting',
+        children: [{
+            title: '用户管理',
+            key: '/user',
+            icon: 'user'
         }
         ]
     },

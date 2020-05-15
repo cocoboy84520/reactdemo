@@ -1,32 +1,9 @@
 import React, {Component} from 'react'
 import './index.less'
-import {Icon, Menu, Dropdown,} from 'antd'
+import {Icon, Menu, Dropdown,Modal} from 'antd'
 import {connect} from 'react-redux'
 import {withTranslation} from 'react-i18next'
-
-const usermenu = (
-    <Menu>
-        <Menu.Item className='menuitem'>
-            <Icon type="user" />
-            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-                个人中心
-            </a>
-        </Menu.Item>
-        <Menu.Item className='menuitem'>
-            <Icon type="setting" />
-            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
-                个人设置
-            </a>
-        </Menu.Item>
-        <Menu.Divider />
-        <Menu.Item className='menuitem'>
-            <Icon type="poweroff" />
-            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-                退出登录
-            </a>
-        </Menu.Item>
-    </Menu>
-);
+import {logout} from "../../redux/actions";
 
 
 @withTranslation()
@@ -49,9 +26,52 @@ class Index extends Component {
          )
      }
 
+     usermenu =()=>{
+        return (
+             <Menu onClick={(e)=>this.menuclick(e)}>
+                 <Menu.Item className='menuitem'>
+                     <Icon type="user" />
+                         个人中心
+                 </Menu.Item>
+                 <Menu.Item className='menuitem'>
+                     <Icon type="setting" />
+                     个人设置
+                 </Menu.Item>
+                 <Menu.Divider />
+                 <Menu.Item className='menuitem'>
+                     <Icon type="poweroff" />
+                     退出登录
+                 </Menu.Item>
+             </Menu>
+         );
+     }
 
     changelang=(lang)=>{
         this.props.i18n.changeLanguage(lang);
+    }
+
+    menuclick=(e)=>{
+         if(e.key=='item_3')
+         {
+             this.logout()
+         }
+         if(e.key=='item_1')
+         {
+             this.props.history.push('/account')
+         }
+    }
+
+    logout=()=>{
+         Modal.confirm({
+             title: '询问',
+             content: '确定要退出系统吗?',
+             okText:"确认",
+             cancelText:'取消',
+             onOk:()=> {
+                 this.props.logout()
+                 this.props.history.replace('login')
+             }
+         })
     }
 
     render() {
@@ -67,7 +87,7 @@ class Index extends Component {
                         <Icon type="bell"/>
                     </span>
                     {/*//头像*/}
-                    <Dropdown overlay={usermenu}>
+                    <Dropdown overlay={this.usermenu}>
                         <span className="ant-dropdown-link" href="#" style={{cursor:'pointer'}}>
                             <div className='avatar-drop'>
                                 <img
@@ -93,5 +113,5 @@ class Index extends Component {
     }
 }
 export default connect(
-    status=>({user:status.user}),{}
+    status=>({user:status.user}),{logout}
 )(Index)

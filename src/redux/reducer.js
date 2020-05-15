@@ -1,12 +1,14 @@
 
 
 import {combineReducers} from "redux";
-import {RECEIVE_USER, SET_HEAD_TITLE} from './action-type'
+import {LOGOUT, RECEIVE_USER, SET_HEAD_TITLE} from './action-type'
 const initUser={}
 function user(state=initUser,action) {
     switch (action.type) {
         case RECEIVE_USER:
             return action.user
+        case LOGOUT:
+            return  initUser
         default:
             return state
     }
@@ -24,5 +26,5 @@ function headTitle(state=initHeadTitle,action) {
 
 export default combineReducers({
     headTitle,
-    user
+    user,
 })
