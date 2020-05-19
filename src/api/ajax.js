@@ -10,7 +10,7 @@ export default  function ajax(url,data={},type='GET') {
     //添加一个请求拦截器
     axios.interceptors.request.use(function (config) {
         const {user}=store.getState();
-        config.headers.common['Token'] = user.id;
+        config.headers.common['Authorization'] = user.Token;
         return config;
     }, function (error) {
         // Do something with request error

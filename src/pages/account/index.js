@@ -3,7 +3,9 @@ import {Menu} from "antd";
 import Baseview from "./baseview";
 import Bind from "./bind";
 import './index.less'
-
+import {connect} from 'react-redux'
+import {receiveUser} from '../../redux/actions'
+@connect( state=>state, { receiveUser } )
 class Index extends Component {
     constructor(props, context) {
         super(props, context);
@@ -25,10 +27,11 @@ class Index extends Component {
     }
 
     render() {
+        console.log(this.props)
         return (
             <div style={{flex:1,display:"flex",backgroundColor:'white'}}>
                 <div style={{flex:1,borderRight:'1px solid #e8e8e8'}}>
-                    <Menu mode="inline" onClick={({key})=>this.setState({selectkey:key})}>
+                    <Menu mode="inline" onClick={({key})=>this.setState({selectkey:key})} selectedKeys={this.state.selectkey}>
                         <Menu.Item key={'base'}>基本信息</Menu.Item>
                         <Menu.Item key={'bind'}>账号绑定</Menu.Item>
                     </Menu>

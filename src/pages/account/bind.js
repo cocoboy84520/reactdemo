@@ -17,6 +17,12 @@ class Bind extends Component {
         }
     }
 
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
 
     bind=()=>{
         console.log('绑定微信')
@@ -73,6 +79,7 @@ class Bind extends Component {
                     visible={this.state.visible}
                     footer={null}
                     closable={false}
+                    onCancel={this.handleCancel}
                 >
                     <div style={{display:"flex",justifyContent:"center",alignItems:"center"}} id={'qrcode'}>
                         <iframe  src="https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=ww18011af482c08ca9&agentid=1000003&redirect_uri=http://122.225.145.62/bingresult&state=123456&login_type=jssdk" frameBorder="0" scrolling="no" width="300px" height="400px"></iframe>

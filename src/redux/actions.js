@@ -15,7 +15,7 @@ export const userlogin=(username,password)=>{
             const user=result.data
             //设置默认的header，用于验证用户登录信息
             //axios.defaults.headers.common['Token']=user.id
-            window.sessionStorage.setItem('token',user.id)
+            window.sessionStorage.setItem('token',user.Token)
             dispatch(receiveUser(user))
         }else{
             errormodal(result.msg)
@@ -29,7 +29,7 @@ export const wxlogin=(code)=>{
         if(result.ret===200)
         {
             const user=result.data
-            window.sessionStorage.setItem('token',user.id)
+            window.sessionStorage.setItem('token',user.Token)
             dispatch(receiveUser(user))
         }else{
             errormodal(result.msg)
@@ -41,3 +41,9 @@ export const wxlogin=(code)=>{
 export const logout=()=>({
     type:LOGOUT
 })
+
+export const updateuserinfo=(userinfo)=>{
+    return dispatch=>{
+        dispatch(receiveUser(userinfo))
+    }
+}

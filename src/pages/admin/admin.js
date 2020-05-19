@@ -17,6 +17,7 @@ import {connect} from "react-redux";
 import User from "../user/user";
 import Account from '../account/index'
 import Bingresult from "../account/bingresult";
+import express from '../express'
 const { Header, Footer, Sider, Content } = Layout;
  class Admin extends Component {
     render() {
@@ -44,6 +45,7 @@ const { Header, Footer, Sider, Content } = Layout;
                                 <Route path='/user' component={User}></Route>
                                 <Route path='/account' component={Account}></Route>
                                 <Route path='/bingresult' component={Bingresult}></Route>
+                                <Route path='/express' component={express}></Route>
                                 {/*<Route path='/editcalendar' component={Editcalendar}></Route>*/}
                                 <Redirect to='/home'/>
                             </Switch>

@@ -89,3 +89,12 @@ export const  loginwithwx=(code)=>ajax('/index.php?s=User.wxlogin',{code},'POST'
 
 //绑定企业微信
 export const wxbind=(code)=>ajax('/index.php?s=User.wxbind',{code},'POST')
+
+//更新账户信息
+export const updateaccount=(NO,name,email,mobile,backupmobile)=>ajax('/index.php?s=Account.update',{NO,name,email,mobile,backupmobile},'POST')
+
+//获取物流公司
+export const getexpresslist=(searchtext)=>ajax('index.php?s=Express.getexpresslist',{searchtext},'POST')
+
+//查询物流轨迹
+export const gettrack=(ShipperCode,LogisticCode)=>ajax('index.php?s=Express.tracks',{ShipperCode,LogisticCode},'POST')

@@ -6,7 +6,7 @@ const initUser={}
 function user(state=initUser,action) {
     switch (action.type) {
         case RECEIVE_USER:
-            return action.user
+            return Object.assign(action.user,state)
         case LOGOUT:
             return  initUser
         default:
