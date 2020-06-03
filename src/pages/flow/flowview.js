@@ -18,7 +18,7 @@ import Loading from "../../components/loading";
 import {dochecksave, getflowdetail} from "../../api";
 import moment from 'moment';
 import {connect} from 'react-redux'
-
+import queryString from 'query-string'
 const {Step} = Steps;
 const {TextArea} = Input;
 const menu = (
@@ -53,16 +53,23 @@ class FlowView extends Component {
     }
 
     componentDidMount() {
-        let {wf_id} = this.props.location.state
+        let wf_id
+        debugger
+        const parsed = queryString.parse(this.props.location.search);
+        if(parsed.flowid)
+        {
+            wf_id=parsed.flowid
+        }else{
+            wf_id=this.props.location.state.wf_id
+        }
         this.loaddetail(wf_id)
         this.setState({menudata: this.createMenu})
     }
 
     createMenu = () => {
-        debugger
         const menu = (<Menu>
             {this.state.detaildata.preprocess.map((item, index) => <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+                <a onClick={()=>this.dochecksave('back',item.id)}>
                     {item.text}
                 </a>
             </Menu.Item>)}
@@ -81,8 +88,8 @@ class FlowView extends Component {
     }
 
 
-    dochecksave = async (status) => {
-        const result = await dochecksave(this.state.detaildata.f_data.id, status, this.remark)
+    dochecksave = async (status,wf_backflow) => {
+        const result = await dochecksave(this.state.detaildata.f_data.id, status, this.remark,wf_backflow)
         if (result.ret === 200) {
             message.success('审核成功')
             window.history.back()
@@ -104,7 +111,7 @@ class FlowView extends Component {
             )
         } else {
             const detaildata = this.state.detaildata
-            const disabled = this.props.user.id.toString() != this.state.detaildata.process.auto_sponsor_ids
+            const disabled =this.props.user.id.toString() != this.state.detaildata.process.auto_sponsor_ids||this.state.detaildata.f_data.status==-1
             return (
                 <div>
                     <PageHeader
@@ -112,7 +119,7 @@ class FlowView extends Component {
                         onBack={() => window.history.back()}
                         title={'申请号:' + detaildata.f_data.No}
                         extra={[
-                            <Button target={'_blank'} href={'http://127.0.0.1:1065/?s=PdfView.index&wfid='+this.state.detaildata.f_data.id} key="1" type="primary" disabled={this.state.detaildata.f_data.status!=2}>
+                            <Button target={'_blank'} href={'/index.php?s=PdfView.index&wfid='+this.state.detaildata.f_data.id} key="1" type="primary" disabled={this.state.detaildata.f_data.status!=2}>
                                 下载
                             </Button>,
                         ]}
@@ -129,12 +136,12 @@ class FlowView extends Component {
                     </PageHeader>
 
                     <Card title="流程进度" bordered={false} style={{marginTop: 20}}>
-                        <Steps size="small" progressDot current={this.state.detaildata.current}
-                               style={{marginTop: 20, marginBottom: 20}}>
+                        {this.state.detaildata.f_data.status!=-1&&<Steps size="small" progressDot current={this.state.detaildata.current}
+                                                                         style={{marginTop: 20, marginBottom: 20}}>
                             {this.state.detaildata.singlist.map((item, index) =>
                                 <Step title={item.status} description={item.auto_sponsor_text}/>
                             )}
-                        </Steps>
+                        </Steps>}
                     </Card>
                     <Card title="申请内容" bordered={false} style={{marginTop: 20}}>
                         <Descriptions title={this.state.detaildata.f_data.new_title} column={3} size={'middle '}
@@ -183,7 +190,7 @@ class FlowView extends Component {
                     }}>
                         {/*this.state.detaildata.f_data.status == 2&&*/}
                         <Button disabled={disabled}
-                                onClick={() => this.dochecksave('ok')} style={{marginLeft: 10}}
+                                onClick={() => this.dochecksave('ok',0)} style={{marginLeft: 10}}
                                 type="primary">审核</Button>
                         <Button disabled={disabled} onClick={() => this.dochecksave('back')}
                                 style={{marginLeft: 10}}>会签</Button>

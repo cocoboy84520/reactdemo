@@ -69,14 +69,29 @@ export const get_flowlist=()=>ajax('/index.php?s=Workflow.getflowlist',{},'POST'
 //发起流程
 export const startflow=(flowdata,flowid)=>ajax('/index.php?s=Workflow.startflow',{flowdata,flowid},'POST')
 
+//发起流程(编辑)
+export const starteditflow=(flowdata)=>ajax('/index.php?s=Workflow.starteditflow',{flowdata},'POST')
+
+//保存流程
+export const saveflow=(flowdata,flowid)=>ajax('/index.php?s=Workflow.saveflow',{flowdata,flowid},'POST')
+
+//保存流程（编辑）
+export const saveeditflow=(flowdata)=>ajax('/index.php?s=Workflow.saveeditflow',{flowdata},'POST')
+
 //获取我的申请
-export const getmyflow=()=>ajax('/index.php?s=Workflow.myflow',{},'POST')
+export const getmyflow=(rangedate,status,No,No2,new_title)=>ajax('/index.php?s=Workflow.myflow',{rangedate,status,No,No2,new_title},'POST')
+
+//获取待我审批
+export const getmycheck=(rangedate,status,No,No2,new_title)=>ajax('/index.php?s=Workflow.mycheck',{rangedate,status,No,No2,new_title},'POST')
 
 //获取申请详情
 export const getflowdetail=(wf_id)=>ajax('/index.php?s=Workflow.flowdetail',{wf_id},'POST')
 
+//获取编辑详情
+export const geteditinfo=(wf_id)=>ajax('/index.php?s=Workflow.geteditinfo',{wf_id},'POST')
+
 //流程审批
-export const dochecksave=(wf_fid,submit_to_save,remark)=>ajax('/index.php?s=Workflow.do_check_save',{wf_fid,submit_to_save,remark},'POST')
+export const dochecksave=(wf_fid,submit_to_save,remark,wf_backflow)=>ajax('/index.php?s=Workflow.do_check_save',{wf_fid,submit_to_save,remark,wf_backflow},'POST')
 
 //添加用户
 export const adduser=(username,name,email,mobile,departmentid,backupmobile)=>ajax('/index.php?s=User.add',{username,name,email,mobile,departmentid,backupmobile},'POST')
@@ -98,3 +113,12 @@ export const getexpresslist=(searchtext)=>ajax('index.php?s=Express.getexpressli
 
 //查询物流轨迹
 export const gettrack=(ShipperCode,LogisticCode)=>ajax('index.php?s=Express.tracks',{ShipperCode,LogisticCode},'POST')
+
+//停用用户账号
+export const stopuser=(id)=>ajax('index.php?s=User.accountstop',{id},'POST')
+
+//启用用户账号
+export const enableduser=(id)=>ajax('index.php?s=User.accountenabled',{id},'POST')
+
+//获取部门列表
+export const getDartMentList=()=>ajax('index.php?s=Department.getlist',{},'POST')

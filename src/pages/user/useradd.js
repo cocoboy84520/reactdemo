@@ -69,11 +69,10 @@ class UserAdd extends Component{
                     </div>
                     </Form>
                 </div>
-
             </div>
         )
     }
 
 }
-const AddUserForm = Form.create()(UserAdd)
+
 export default UserAdd

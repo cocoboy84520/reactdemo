@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 import {Form, Row, Col, Button, Icon, Select, Input, Table, DatePicker, Modal, Tag, message} from "antd";
 import {Link} from "react-router-dom";
 
-import PageHead from "../../components/pageheader";
+import PageHead from "../../../components/pageheader";
 import {connect} from "react-redux";
-import {calendardel, getmyflow, getuserlist, noticedel, noticelist} from "../../api";
+import {calendardel, getmycheck, getmyflow, getuserlist, noticedel, noticelist} from "../../../api";
 import moment from 'moment';
 
 const ButtonGroup = Button.Group;
@@ -24,7 +24,7 @@ const columns = [
         render:(text,record,index)=>{
             if(record.status===0)
             {
-                 return <Link to={{pathname: '/myflow/editflow', state: {wf_id: record.id}}}>{text}</Link>
+                return <Link to={{pathname: '/myflow/editflow', state: {wf_id: record.id}}}>{text}</Link>
             }else {
                 return <Link to={{pathname: '/myflow/flowview', state: {wf_id: record.id}}}>{text}</Link>
             }
@@ -81,7 +81,7 @@ const columns = [
 ];
 
 
-class Myflowlist extends Component {
+class Index extends Component {
 
 
     constructor(props) {
@@ -110,7 +110,7 @@ class Myflowlist extends Component {
 
     loaddata = async () => {
         try {
-            const myflow = await getmyflow()
+            const myflow = await getmycheck()
             console.log(myflow)
             this.setState({data: myflow.data.list, loading: false})
         } catch (e) {
@@ -219,8 +219,8 @@ class Myflowlist extends Component {
     }
 }
 
-const MyflowForm = Form.create()(Myflowlist)
+const Mycheck = Form.create()(Index)
 
 export default connect(
     status => ({user: status.user}), {}
-)(MyflowForm)
+)(Mycheck)

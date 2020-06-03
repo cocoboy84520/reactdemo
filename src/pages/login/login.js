@@ -81,7 +81,10 @@ class Login extends Component {
         const {t} = this.props;
         const {getFieldDecorator} = this.props.form;
         const user=this.props.user
+        console.log(this.props)
         if(user &&user.id) {
+            if(this.props.location.state)
+                return  <Redirect to={this.props.location.state.RedirectUrl} />
             return <Redirect to='/home'/>
         }
         return (
@@ -91,7 +94,7 @@ class Login extends Component {
                         <img src={logo} className="logoimg"/>
                         <h1>KanKen OA System</h1>
                     </div>
-                    <p>康肯环保设备有限公司办公OA系统</p>
+                    <p>康肯环保设备(平湖)有限公司办公OA系统</p>
                     <div className="frm">
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Item>

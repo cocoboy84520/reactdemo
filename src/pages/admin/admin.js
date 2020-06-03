@@ -18,13 +18,16 @@ import User from "../user/user";
 import Account from '../account/index'
 import Bingresult from "../account/bingresult";
 import express from '../express'
+import Mycheck from "../flow/check/myckeck";
 const { Header, Footer, Sider, Content } = Layout;
  class Admin extends Component {
     render() {
         const user=this.props.user
         if(!user||!user.id)
         {
-            return <Redirect to='/login' />
+            console.log(this.props)
+            debugger
+            return <Redirect to={{pathname:'/login',state:{RedirectUrl:this.props.location.pathname+this.props.location.search}}} />
         }
         return (
                 <Layout style={{height:'100%'}}>
@@ -46,6 +49,7 @@ const { Header, Footer, Sider, Content } = Layout;
                                 <Route path='/account' component={Account}></Route>
                                 <Route path='/bingresult' component={Bingresult}></Route>
                                 <Route path='/express' component={express}></Route>
+                                <Route path='/mycheck' component={Mycheck}></Route>
                                 {/*<Route path='/editcalendar' component={Editcalendar}></Route>*/}
                                 <Redirect to='/home'/>
                             </Switch>

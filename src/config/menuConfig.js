@@ -28,10 +28,16 @@ const menuList = [
             key: '/newflow',
             icon: 'plus-circle'
         }, {
-            title: '申请列表',
+            title: '我的申请',
             key: '/myflow',
             icon: 'key'
-        }, {
+        },
+            {
+                title: '待我审批',
+                key: '/mycheck',
+                icon: 'key'
+            },
+            {
             title: '流程管理',
             key: '/flowadmin',
             icon: 'key'

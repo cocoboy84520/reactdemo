@@ -4,7 +4,7 @@ import {Form, Row, Col, Button, Icon, Input, Table, DatePicker, Modal, message, 
 import './user.less'
 import PageHead from "../../components/pageheader";
 import {connect} from "react-redux";
-import {calendardel, userlist, noticedel, noticelist} from "../../api";
+import {calendardel, userlist, noticedel, noticelist, stopuser, enableduser} from "../../api";
 
 const ButtonGroup = Button.Group;
 const columns = [
@@ -40,7 +40,7 @@ const columns = [
         dataIndex: 'backupmobile',
     },
     {
-        title: '是否启用',
+        title: '状态',
         dataIndex: 'status',
         render: (text, record, index) => {
             return text==1? <Tag color="#008000">正常</Tag>:<Tag color="#FF0000">禁用</Tag>;
@@ -125,16 +125,16 @@ class Index extends Component {
         this.props.history.push('/user/add')
     }
 
-    del = () => {
-        if (this.state.selectedRowKeys.length > 0) {
+    stop = () => {
+        if (this.state.selectedRowKeys.length >0) {
             Modal.confirm({
-                title: 'Confirm',
-                content: '确定要删除这个通知?',
+                title: '询问',
+                content: '确定要停用这个用户?',
                 okText: '确认',
                 cancelText: '取消',
                 onOk: async () => {
                     try {
-                        const result = await noticedel(this.state.selectedRowKeys)
+                        const result = await stopuser(this.state.selectedRowKeys)
                         this.loaddata()
                     } catch (e) {
                         message.error(e.message)
@@ -142,12 +142,37 @@ class Index extends Component {
                 }
             });
         } else {
-            message.error('请先选中要删除的行')
+            message.error('请先选中要操作的行')
+        }
+    }
+
+    enableduser = () => {
+        if (this.state.selectedRowKeys.length >0) {
+            Modal.confirm({
+                title: '询问',
+                content: '确定要启用这个用户?',
+                okText: '确认',
+                cancelText: '取消',
+                onOk: async () => {
+                    try {
+                        const result = await enableduser(this.state.selectedRowKeys)
+                        this.loaddata()
+                    } catch (e) {
+                        message.error(e.message)
+                    }
+                }
+            });
+        } else {
+            message.error('请先选中要操作的行')
         }
     }
 
     edit = (key) => {
-        this.props.history.push('/notice/edit')
+        if (this.state.selectedRowKeys.length ==1) {
+            this.props.history.push({pathname:'/user/edit',state:this.state.selectedRowKeys})
+        } else {
+            message.error('请先选中要操作的行')
+        }
     }
 
     render() {
@@ -197,8 +222,9 @@ class Index extends Component {
                     <div className='headright'>
                         <ButtonGroup>
                             <Button type="primary" icon={'plus'} onClick={this.add}>添加</Button>
-                            <Button type="primary" icon={'edit'}>编辑</Button>
-                            <Button type='danger' icon={'delete'} onClick={this.del}>删除</Button>
+                            <Button type="primary" icon={'edit'} onClick={this.edit}>编辑</Button>
+                            <Button type="primary" icon={'check-circle'} onClick={this.enableduser}>启用</Button>
+                            <Button type='danger' icon={'stop'} onClick={this.stop}>停用</Button>
                         </ButtonGroup>
 
                     </div>

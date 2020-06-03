@@ -3,12 +3,21 @@ import PageHead from "../../components/pageheader";
 import './startflow.less'
 import {Form, Input, Row, Col, Button, Card, Select, Icon, Upload, message} from "antd";
 import FormDesign from '../../components/formdesign';
-import {get_formdesign, getuserlist, saveflow, startflow} from "../../api";
+import {
+    get_formdesign,
+    geteditinfo,
+    getflowdetail,
+    getuserlist,
+    saveeditflow,
+    saveflow,
+    starteditflow,
+    startflow
+} from "../../api";
 import {withTranslation} from 'react-i18next'
 import {connect} from "react-redux";
 import {randomNumber} from '../../common/common'
-import locale from '../../locale/zh'
 import moment from "moment";
+
 const {TextArea} = Input;
 const {FormDisplay} = FormDesign;
 const FormItem = Form.Item;
@@ -34,15 +43,12 @@ class FormShow extends Component {
 
     onChange = (e) => {
         let fileList = e.fileList;
-        console.log(fileList)
         let aaa = fileList.filter(file => {
             console.log(file)
-            debugger
             if(file.response)
             {
                 if(file.response.ret==200)
                 {
-                    debugger
                     file.url=file.response.data.url
                     return true
                 }else {
@@ -64,8 +70,8 @@ class FormShow extends Component {
 
     componentDidMount() {
         this.loaduser()
-        const a = randomNumber();
-        this.props.form.setFieldsValue({No: a})
+        //this.props.form.setFieldsValue(this.props.FormData.new_con)
+
     }
 
     handleSubmit = e => {
@@ -78,8 +84,7 @@ class FormShow extends Component {
                 }
             }
             if (!err) {
-                    const result=await startflow(values,this.props.location.state.item.id);
-                    debugger
+                    const result=await starteditflow(values);
                     if(result.ret===200)
                     {
                         message.success('申请成功')
@@ -97,10 +102,8 @@ class FormShow extends Component {
                     values[key]=moment(values[key]).format('YYYY-MM-DD HH:mm')
                 }
             }
-            console.log(values)
             if (!err) {
-                const result=await saveflow(values,this.props.location.state.item.id);
-                debugger
+                const result=await saveeditflow(values);
                 if(result.ret===200)
                 {
                     message.success('保存成功')
@@ -114,8 +117,7 @@ class FormShow extends Component {
         const {t} = this.props;
         const {fieldsData, form} = this.props;
         const {getFieldDecorator} = this.props.form
-        const item = this.props.location.state.item
-        console.log(this.props)
+        const {initValues} = this.props
         const props = {
             name: 'upfile',
             action: '/?s=File.upload',
@@ -124,20 +126,30 @@ class FormShow extends Component {
             headers:{'Authorization':this.props.user.Token}
         };
         const {fileList} = this.state
+        console.log(this.props)
         return (
             <Form
                 onSubmit={this.handleSubmit}
             >
+
                 <div style={{marginBottom:50}}>
-                    <Card title={item.flow_name} headStyle={{fontSize: 24, fontWeight: '900', textAlign: 'center'}}
+                    <Card title={initValues?initValues.new_type:''} headStyle={{fontSize: 24, fontWeight: '900', textAlign: 'center'}}
                           bordered={false}>
+                        <Form.Item
+                        >
+                            {getFieldDecorator('id', {})(<Input type={"hidden"}/>)}
+                        </Form.Item>
+                        <Form.Item
+                        >
+                            {getFieldDecorator('flowid', {})(<Input type={"hidden"}/>)}
+                        </Form.Item>
                         <Row gutter={16}>
                             <Col lg={6} md={12} sm={24}>
+
                                 <Form.Item
                                     label={'申请号'}
                                 >
                                     {getFieldDecorator('No', {})(<Input placeholder="请输入申请号"/>)}
-
                                 </Form.Item>
                             </Col>
                             <Col xl={{span: 6, offset: 2}} lg={{span: 8}} md={{span: 12}} sm={24}>
@@ -162,16 +174,6 @@ class FormShow extends Component {
                                         initialValue: this.props.user.name
                                     })(<Input disabled={true} placeholder="请输入申请人"/>)}
                                 </Form.Item>
-                                <Form.Item>
-                                {getFieldDecorator('flowtype', {
-                                    initialValue:item.flow_name
-                                })(<Input type={"hidden"}/>)}
-                            </Form.Item>
-                                <Form.Item>
-                                    {getFieldDecorator('formid', {
-                                        initialValue:this.props.location.state.item.id
-                                    })(<Input type={"hidden"}/>)}
-                                </Form.Item>
                             </Col>
                         </Row>
                     </Card>
@@ -187,8 +189,9 @@ class FormShow extends Component {
                                 <Form.Item label={("附件")}>
                                     {getFieldDecorator('files', {
                                         valuePropName:'fileList',
+                                        initialValue:initValues?initValues.files:[],
                                         getValueFromEvent: this.normFile
-                                    })(<Upload showUploadList={{showRemoveIcon:true,showDownloadIcon:false}} {...props} fileList={this.state.fileList}
+                                    })(<Upload showUploadList={{showRemoveIcon:true,showDownloadIcon:false}} {...props}
                                     >
                                         <Button>
                                             <Icon type="upload"/> 上传
@@ -209,10 +212,9 @@ class FormShow extends Component {
                                                         {item.users.map((user, uindex) => {
                                                             return (
                                                                 <Option key={user.id}
-                                                                        value={user.id.toString()}>{user.name}</Option>
+                                                                        value={user.id}>{user.name}</Option>
                                                             )
                                                         })}
-
                                                     </OptGroup>
                                                 )
                                             }
@@ -270,7 +272,7 @@ const WrappedFormShow = Form.create({
         if (initValues) {
             Object.keys(initValues).forEach(key => {
                 obj[key] = Form.createFormField({
-                    value: initValues[key]
+                    value: key.startsWith('dateformat_')?moment(initValues[key]):initValues[key]
                 });
             });
         }
@@ -279,8 +281,8 @@ const WrappedFormShow = Form.create({
 })(FormShow);
 
 
-@Form.create()
-class Startflow extends Component {
+
+class Editflow extends Component {
 
 
     constructor(props) {
@@ -291,11 +293,10 @@ class Startflow extends Component {
     }
 
     async componentDidMount() {
-        const ret = await get_formdesign(this.props.location.state.item.id)
+        const ret = await geteditinfo(this.props.location.state.wf_id)
         if (ret.ret === 200) {
             if (ret.data) {
-                if (ret.data.designdata)
-                    this.setState({fieldsData: JSON.parse(ret.data.designdata)})
+                    this.setState({fieldsData: JSON.parse(ret.data.design.designdata),data:ret.data})
             }
         }
     }
@@ -315,7 +316,7 @@ class Startflow extends Component {
             <div>
                 <PageHead/>
                 <div className={'addformdiv'}>
-                    <WrappedFormShow {...this.props} fieldsData={this.state.fieldsData}/>
+                    <WrappedFormShow {...this.props} fieldsData={this.state.fieldsData} initValues={this.state.data}/>
                 </div>
             </div>
         )
@@ -324,4 +325,4 @@ class Startflow extends Component {
 
 export default connect(
     status => ({user: status.user}), {}
-)(Startflow)
+)(Editflow)

@@ -710,7 +710,6 @@ export default class FormDesign extends PureComponent {
             </Panel>
             <Panel header="基础组件" key={2}>
               {Util.baseItems.map((item, index) => {
-                  debugger
                 return (
                   <BaseFields
                     dataSet={item}

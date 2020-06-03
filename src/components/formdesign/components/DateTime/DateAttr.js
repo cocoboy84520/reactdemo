@@ -8,6 +8,7 @@ const radioStyle = {
 };
 export default class DateAttr extends PureComponent {
   handleChange = item => {
+    console.log(item)
     const { activeItem, onSave } = this.props;
     const { index, attrInfo, cellIndex  } = activeItem;
     const updateAttrInfo = {
@@ -42,7 +43,7 @@ export default class DateAttr extends PureComponent {
               <div className="fieldblock">
                 <input
                   type="text"
-                  value={titleValue}                 
+                  value={titleValue}
                   placeholder={titleValue}
                   onChange={e => {
                     this.handleChange({ titleValue: e.target.value });
@@ -52,7 +53,7 @@ export default class DateAttr extends PureComponent {
             </div>
             <div className="wf-setter-field wf-setting-label">
               <div className="fieldname">
-                字段名
+                字段名称
                 <span
                   className={`fieldinfo ${
                     Array.from(name).length > 20 ? "error-toolong" : ""

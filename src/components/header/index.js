@@ -94,7 +94,7 @@ class Index extends Component {
                                     src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
                                     alt="avatar"/>
                                 <span>
-                                    {this.props.user.username}
+                                    {this.props.user.name}
                         </span>
                             </div>
                         </span>
