@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import PageHead from '../../components/pageheader'
 import {Form, Input, Select, Upload, Button, Icon, message} from "antd";
 import {adduser, getDartMentList} from "../../api";
-import {useEslintRc} from "customize-cra";
 const {Option} = Select;
 @Form.create()
 class Useredit extends Component{
@@ -14,18 +13,18 @@ class Useredit extends Component{
         };
     }
 
-    // componentDidMount() {
-    //    // this.LoadDartMent
-    // }
-    //
-    // LoadDartMent=async ()=>{
-    //     try{
-    //         const ret=await getDartMentList()
-    //         this.setState({DepartmentList:ret.data})
-    //     }catch (e) {
-    //         message.error('部门数据获取错误')
-    //     }
-    // }
+    componentDidMount() {
+       this.LoadDartMent()
+    }
+
+    LoadDartMent=async ()=>{
+        try{
+            const ret=await getDartMentList()
+            this.setState({DepartmentList:ret.data})
+        }catch (e) {
+            message.error('部门数据获取错误')
+        }
+    }
 
     handleSubmit=(event)=>{
         event.preventDefault()

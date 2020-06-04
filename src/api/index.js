@@ -121,4 +121,4 @@ export const stopuser=(id)=>ajax('index.php?s=User.accountstop',{id},'POST')
 export const enableduser=(id)=>ajax('index.php?s=User.accountenabled',{id},'POST')
 
 //获取部门列表
-export const getDartMentList=()=>ajax('index.php?s=Department.getlist',{},'POST')
+export const getDartMentList=()=>ajax('/index.php?s=Department.getlist',{},'POST')
