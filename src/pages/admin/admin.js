@@ -26,7 +26,6 @@ const { Header, Footer, Sider, Content } = Layout;
         if(!user||!user.id)
         {
             console.log(this.props)
-            debugger
             return <Redirect to={{pathname:'/login',state:{RedirectUrl:this.props.location.pathname+this.props.location.search}}} />
         }
         return (

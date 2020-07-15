@@ -78,7 +78,6 @@ class flowdesign extends Component {
 
     onBeforeCommandExecute = async e => {
         if (e.command.name === 'add' && e.command.type == 'node') {
-            debugger
             let ret = await addprocess(this.props.location.state.flowid, e.command.addModel.id)
             if (ret.ret !== 200) {
                 // 如果数据库添加节点失败则删除该节点

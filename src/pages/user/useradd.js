@@ -1,11 +1,30 @@
 import React, {Component} from 'react'
 import PageHead from '../../components/pageheader'
 import {Form, Input, Select, Upload, Button, Icon, message} from "antd";
-import {adduser} from "../../api";
+import {adduser, getDartMentList} from "../../api";
 const {Option} = Select;
 @Form.create()
 class UserAdd extends Component{
 //
+
+    constructor(props) {
+      super(props);
+      this.state = {DepartmentList:[]};
+    }
+
+    componentDidMount() {
+        this.LoadDartMent()
+    }
+
+    LoadDartMent=async ()=>{
+        try{
+            const ret=await getDartMentList()
+            this.setState({DepartmentList:ret.data})
+        }catch (e) {
+            message.error('部门数据获取错误')
+        }
+    }
+
     handleSubmit=(event)=>{
         event.preventDefault()
         this.props.form.validateFields(async (err, values) => {
@@ -13,7 +32,7 @@ class UserAdd extends Component{
             if(!err)
             {
                 try{
-                    const ret =await adduser(values.username,values.name,values.Email,values.mobile,values.departmentid,values.backupmobile)
+                    const ret =await adduser(values.username,values.name,values.Email,values.mobile,values.departmentid,values.backupmobile,values.password)
                     if(ret.ret===200)
                     {
                         this.props.history.push('/user')
@@ -46,12 +65,22 @@ class UserAdd extends Component{
                         <Form.Item label={("部门")}>
                             {getFieldDecorator('departmentid', {
                                 rules: [{required: true, message: '请选择部门'}]
-                            })(<Input style={{width:500}}/>)}
+                            })(<Select  style={{ width: 120 }} >
+                                {this.state.DepartmentList.map((item,index)=>
+                                    <Option value={item.id}>{item.DepartName}</Option>
+                                )}
+
+                            </Select>)}
                         </Form.Item>
                         <Form.Item label={("Email")}>
                             {getFieldDecorator('Email', {
                                 rules: [{required: true, message: '请填写电子邮件'}]
                             })(<Input  style={{width:500}}/>)}
+                        </Form.Item>
+                        <Form.Item label={("密码")}>
+                            {getFieldDecorator('password', {
+                                rules: [{required: true, message: '请填写密码'}]
+                            })(<Input.Password  style={{width:500}}/>)}
                         </Form.Item>
                         <Form.Item label={("电话")}>
                             {getFieldDecorator('mobile', {

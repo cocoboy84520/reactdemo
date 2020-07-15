@@ -66,6 +66,7 @@ class Login extends Component {
 
     //切换语言
     changelang = (lang) => {
+        console.log(this.props.i18n)
         this.props.i18n.changeLanguage(lang);
     }
 

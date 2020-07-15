@@ -8,7 +8,7 @@ const BASE='http://127.0.0.1:1065/';
 //登录接口
 export const reqlogin=(username,password)=>ajax('/index.php?s=User.login',{username,password},'POST')
 
-export const reqgetcalendar=(begindate)=>ajax('/index.php?s=Calendar.getlist',{begindate},'POST')
+export const reqgetcalendar=(startdate,enddate)=>ajax('/index.php?s=Calendar.getlist',{startdate,enddate},'POST')
 
 export const calendaradd=(userid,name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg)=>ajax('/index.php?s=Calendar.add',{userid,name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg},'POST')
 
@@ -94,7 +94,10 @@ export const geteditinfo=(wf_id)=>ajax('/index.php?s=Workflow.geteditinfo',{wf_i
 export const dochecksave=(wf_fid,submit_to_save,remark,wf_backflow)=>ajax('/index.php?s=Workflow.do_check_save',{wf_fid,submit_to_save,remark,wf_backflow},'POST')
 
 //添加用户
-export const adduser=(username,name,email,mobile,departmentid,backupmobile)=>ajax('/index.php?s=User.add',{username,name,email,mobile,departmentid,backupmobile},'POST')
+export const adduser=(username,name,email,mobile,departmentid,backupmobile,password)=>ajax('/index.php?s=User.add',{username,name,email,mobile,departmentid,backupmobile,password},'POST')
+
+//添加用户
+export const edituser=(id,username,name,email,mobile,departmentid,backupmobile,password)=>ajax('/index.php?s=User.edit',{id,username,name,email,mobile,departmentid,backupmobile,password},'POST')
 
 //获取系统用户列表
 export const userlist=()=>ajax('/index.php?s=User.getuserlist',{},'POST')
@@ -122,3 +125,18 @@ export const enableduser=(id)=>ajax('index.php?s=User.accountenabled',{id},'POST
 
 //获取部门列表
 export const getDartMentList=()=>ajax('/index.php?s=Department.getlist',{},'POST')
+
+//获取单个账号详情
+export const getaccountdetail=(id)=>ajax('/index.php?s=User.getaccountdetail',{id},'POST')
+
+//获取设施列表
+export const getresourcelist=(startDate,endDate)=>ajax('/index.php?s=Resource.resourcelist',{startDate,endDate},'POST')
+
+//添加预约
+export const addFacilities=(data)=>ajax('/index.php?s=Resource.add',data,'POST')
+
+//删除预约
+export const delFacilities=(id)=>ajax('/index.php?s=Resource.del',id,'POST')
+
+//首页信息
+export const gethome=()=>ajax('/index.php?s=Home.index',{},'POST')

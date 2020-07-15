@@ -6,7 +6,6 @@ import Index from "./index";
 export default class Mycheck extends Component{
 //
     render() {
-        debugger
         return (
             <Switch>
                 <Route path='/mycheck' component={Index} exact/> {/*路径完全匹配*/}

@@ -169,7 +169,7 @@ class Index extends Component {
 
     edit = (key) => {
         if (this.state.selectedRowKeys.length ==1) {
-            this.props.history.push({pathname:'/user/edit',state:this.state.selectedRowKeys})
+            this.props.history.push({pathname:'/user/edit',state:this.state.selectedRowKeys[0]})
         } else {
             message.error('请先选中要操作的行')
         }

@@ -25,7 +25,6 @@ class Index extends Component {
     handleSearch = async value => {
         try {
             const ret=await getexpresslist(value)
-            debugger
             if(ret.ret===200){
                 this.setState({data:ret.data.list})
                 console.log(this.state.data)

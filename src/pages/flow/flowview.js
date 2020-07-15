@@ -15,7 +15,7 @@ import {
     Input
 } from 'antd';
 import Loading from "../../components/loading";
-import {dochecksave, getflowdetail} from "../../api";
+import {dochecksave, getflowdetail, loginwithwx} from "../../api";
 import moment from 'moment';
 import {connect} from 'react-redux'
 import queryString from 'query-string'
@@ -54,7 +54,6 @@ class FlowView extends Component {
 
     componentDidMount() {
         let wf_id
-        debugger
         const parsed = queryString.parse(this.props.location.search);
         if(parsed.flowid)
         {
@@ -144,12 +143,14 @@ class FlowView extends Component {
                         </Steps>}
                     </Card>
                     <Card title="申请内容" bordered={false} style={{marginTop: 20}}>
-                        <Descriptions title={this.state.detaildata.f_data.new_title} column={3} size={'middle '}
+                        <Descriptions title={this.state.detaildata.f_data.new_title}  size={'middle '}
                                       bordered>
                             {this.state.detaildata.formdetail.map((item, index) =>
-                                <Descriptions.Item label={item.title} span={3}>{item.value}</Descriptions.Item>
-                            )}
+                                item.map((input,idx)=>
+                                    <Descriptions.Item span={parseInt(3/item.length)} label={input.title} >{input.value}</Descriptions.Item>
+                                )
 
+                            )}
                         </Descriptions>
                     </Card>
                     <Card title="附件" bordered={false} style={{marginTop: 20, display: 'flex', flexDirection: 'column'}}>

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PageHead from '../../components/pageheader'
 import {Form, Input, Select, Upload, Button, Icon, message} from "antd";
-import {adduser, getDartMentList} from "../../api";
+import {adduser, edituser, getaccountdetail, getDartMentList} from "../../api";
 const {Option} = Select;
 @Form.create()
 class Useredit extends Component{
@@ -14,7 +14,23 @@ class Useredit extends Component{
     }
 
     componentDidMount() {
+        console.log(this.props)
        this.LoadDartMent()
+        this.loadAccountDetail()
+    }
+
+    loadAccountDetail=async ()=>{
+        try{
+            const ret=await getaccountdetail(this.props.location.state)
+            const account=ret.data
+            for(let key  in ret.data){
+                console.log(key);
+                console.log(ret.data[key])
+                this.props.form.setFieldsValue(ret.data)
+            }
+        }catch (e) {
+
+        }
     }
 
     LoadDartMent=async ()=>{
@@ -29,11 +45,10 @@ class Useredit extends Component{
     handleSubmit=(event)=>{
         event.preventDefault()
         this.props.form.validateFields(async (err, values) => {
-            console.log(values)
             if(!err)
             {
                 try{
-                    const ret =await adduser(values.username,values.name,values.Email,values.mobile,values.departmentid,values.backupmobile)
+                    const ret =await edituser(this.props.location.state,values.username,values.name,values.email,values.mobile,values.departmentid,values.backupmobile,values.password)
                     if(ret.ret===200)
                     {
                         this.props.history.push('/user')
@@ -68,15 +83,19 @@ class Useredit extends Component{
                                 rules: [{required: true, message: '请选择部门'}]
                             })(<Select  style={{ width: 120 }} >
                                 {this.state.DepartmentList.map((item,index)=>
-                                    <Option value={item.id}>{item.DepartName}</Option>
+                                    <Option key={index} value={item.id}>{item.DepartName}</Option>
                                 )}
-
                             </Select>)}
                         </Form.Item>
                         <Form.Item label={("Email")}>
-                            {getFieldDecorator('Email', {
+                            {getFieldDecorator('email', {
                                 rules: [{required: true, message: '请填写电子邮件'}]
                             })(<Input  style={{width:500}}/>)}
+                        </Form.Item>
+                        <Form.Item label={("密码")}>
+                            {getFieldDecorator('password', {
+                                rules: [{required: true, message: '请填写密码'}]
+                            })(<Input.Password  style={{width:500}}/>)}
                         </Form.Item>
                         <Form.Item label={("电话")}>
                             {getFieldDecorator('mobile', {
@@ -85,7 +104,7 @@ class Useredit extends Component{
                         </Form.Item>
                         <Form.Item label={("备用电话")}>
                             {getFieldDecorator('backupmobile', {
-                                rules: [{required: true, message: '请填写备用电话'}]
+                                rules: [{ message: '请填写备用电话'}]
                             })(<Input  style={{width:500}}/>)}
                         </Form.Item>
                         <div style={{flex:1, justifyContent:'center', alignItems:'center', marginTop:20,textAlign:'center'}}>
@@ -97,7 +116,6 @@ class Useredit extends Component{
             </div>
         )
     }
-
 }
 
 export default Useredit

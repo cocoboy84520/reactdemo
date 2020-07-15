@@ -37,12 +37,10 @@ class FormShow extends Component {
         console.log(fileList)
         let aaa = fileList.filter(file => {
             console.log(file)
-            debugger
             if(file.response)
             {
                 if(file.response.ret==200)
                 {
-                    debugger
                     file.url=file.response.data.url
                     return true
                 }else {
@@ -79,7 +77,6 @@ class FormShow extends Component {
             }
             if (!err) {
                     const result=await startflow(values,this.props.location.state.item.id);
-                    debugger
                     if(result.ret===200)
                     {
                         message.success('申请成功')
@@ -100,7 +97,6 @@ class FormShow extends Component {
             console.log(values)
             if (!err) {
                 const result=await saveflow(values,this.props.location.state.item.id);
-                debugger
                 if(result.ret===200)
                 {
                     message.success('保存成功')

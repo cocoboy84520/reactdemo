@@ -16,7 +16,7 @@ class Editcalendar extends Component {
         super(props);
         this.state = {
             istime: false,
-            ismsg: this.props.location.state.data.ismsg,
+            ismsg: false,
             userlist: [],
             loading:true,
             detaildata:{}
@@ -31,7 +31,7 @@ class Editcalendar extends Component {
         if (userlist.ret === 200) {
             this.setState({userlist: userlist.data})
         }
-        const detaildata=await getcalendardetail(data.id)
+        const detaildata=await getcalendardetail(data)
         if(detaildata.ret===200)
         {
             this.setState({detaildata:detaildata.data.detail,cc:detaildata.data.cc,loading:false})
