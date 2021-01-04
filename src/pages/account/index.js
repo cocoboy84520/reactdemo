@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Menu} from "antd";
 import Baseview from "./baseview";
 import Bind from "./bind";
+import Entrust from "./entrust";
 import './index.less'
 import {connect} from 'react-redux'
 import {receiveUser} from '../../redux/actions'
@@ -22,6 +23,8 @@ class Index extends Component {
                 return <Baseview />
             case 'bind':
                 return <Bind />
+            case 'Entrust':
+                return <Entrust />
         }
         return  null
     }
@@ -34,6 +37,7 @@ class Index extends Component {
                     <Menu mode="inline" onClick={({key})=>this.setState({selectkey:key})} selectedKeys={this.state.selectkey}>
                         <Menu.Item key={'base'}>基本信息</Menu.Item>
                         <Menu.Item key={'bind'}>账号绑定</Menu.Item>
+                        <Menu.Item key={'Entrust'}>审批委托</Menu.Item>
                     </Menu>
                 </div>
                 <div style={{flex:4}}>

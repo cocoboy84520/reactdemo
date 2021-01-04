@@ -16,6 +16,12 @@ class Index extends Component {
     getMenuNodes = (menuList) => {
         const path=this.props.location.pathname;
         return menuList.map(item => {
+            if(item.key=='/flowadmin'||item.key=='/user')
+            {
+                if(this.props.user.name!='张新根')
+                    return
+            }
+            console.log(item)
             if (!item.children) {
                 if(item.key===path||path.indexOf(item.key)===0)
                 {
@@ -81,7 +87,5 @@ class Index extends Component {
 }
 
 export default connect(
-    state=>({
-
-    }),{setHeadTitle}
+    status => ({user: status.user}), {setHeadTitle}
 )(Index)

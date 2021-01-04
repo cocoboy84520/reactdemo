@@ -6,9 +6,10 @@ import 'braft-editor/dist/index.css'
 import BraftEditor from 'braft-editor'
 import {CirclePicker} from 'react-color'
 import {addnotice} from "../../api";
+import {withTranslation} from "react-i18next";
 
 const {Option} = Select;
-
+@withTranslation()
 class Addnotice extends Component {
 
     state = {
@@ -71,6 +72,7 @@ class Addnotice extends Component {
             onChange: this.onChange,
             multiple: true
         };
+        const {t}=this.props
         const {fileList} = this.state
         return (
             <div className={'addnotice'}>
@@ -78,34 +80,34 @@ class Addnotice extends Component {
                 <div className='addformdiv'>
                     <Form labelCol={{span: 2, offset: 4}} wrapperCol={{span: 12, offset: 0}}
                           onSubmit={this.handleSubmit}>
-                        <Form.Item label={("标题")}>
+                        <Form.Item label={t("标题")}>
                             {getFieldDecorator('title', {
-                                rules: [{required: true, message: '请填写公告标题'}]
+                                rules: [{required: true, message: t('请填写公告标题')}]
                             })(<Input/>)}
                         </Form.Item>
-                        <Form.Item label={("标题颜色")}>
+                        <Form.Item label={t("标题颜色")}>
                             {getFieldDecorator('titlecolor', {
-                                rules: [{required: true, message: '请填写公告标题'}]
+                                rules: [{required: true, message: t('请选择标题颜色')}]
                             })(<CirclePicker
                                 colors={["#000000", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3"]}/>)}
                         </Form.Item>
-                        <Form.Item label={("类型")}>
+                        <Form.Item label={t("类型")}>
                             {getFieldDecorator('type', {
-                                rules: [{required: true, message: '请选择公告类型'}]
+                                rules: [{required: true, message:t('请选择公告类型') }]
                             })(<Select style={{width: 120}}>
                                 <Option value="通知">通知</Option>
                                 <Option value="公告">公告</Option>
                                 <Option value="规定">规定</Option>
                             </Select>)}
                         </Form.Item>
-                        <Form.Item label={("正文内容")}>
+                        <Form.Item label={t("正文内容")}>
                             {getFieldDecorator('content', {
                                 validateTrigger: 'onBlur',
                                 rules: [{
                                     required: true,
                                     validator: (_, value, callback) => {
                                         if (value.isEmpty()) {
-                                            callback('请输入正文内容')
+                                            callback(t('请输入正文内容'))
                                         } else {
                                             callback()
                                         }
@@ -114,11 +116,11 @@ class Addnotice extends Component {
                             })(
                                 <BraftEditor
                                     className="my-editor"
-                                    placeholder="请输入正文内容"
+                                    placeholder={t("请输入正文内容")}
                                 />
                             )}
                         </Form.Item>
-                        <Form.Item label={("相关附件")}>
+                        <Form.Item label={t("相关附件")}>
                             {getFieldDecorator('files', {
                                 valuePropName:'fileList',
                                 getValueFromEvent: this.normFile
@@ -131,9 +133,9 @@ class Addnotice extends Component {
                         </Form.Item>
                         <Form.Item wrapperCol={{span: 8, offset: 11}}>
                             <Button htmlType="submit" type="primary" htmlType="submit">
-                                {('提交')}
+                                {t('提交')}
                             </Button>
-                            <Button style={{marginLeft: 20}} onClick={() => this.props.history.goBack()}>返回</Button>
+                            <Button style={{marginLeft: 20}} onClick={() => this.props.history.goBack()}>{t('返回')}</Button>
                         </Form.Item>
                     </Form>
                 </div>

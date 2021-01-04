@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import PageHeader from '../../components/pageheader'
 import {Form, Input, Row, Col, Select, message,Timeline} from 'antd'
 import {getexpresslist, gettrack} from "../../api";
+import {withTranslation} from "react-i18next";
 
 const { Search } = Input;
 const {Option} =Select;
+@withTranslation()
 @Form.create()
 class Index extends Component {
 
@@ -55,6 +57,7 @@ class Index extends Component {
 
     render() {
         const {getFieldDecorator}=this.props.form
+        const {t} =this.props
         const options = this.state.data.map(d => <Option key={d.expresscode}>{d.expressname}</Option>);
         return (
             <div>
@@ -66,7 +69,7 @@ class Index extends Component {
                         </Col>
                         <Col span={12}>
                             <Form labelAlign={"left"} labelCol={{span:4}} wrapperCol={{span:20}}>
-                                <Form.Item label={'物流公司'}>
+                                <Form.Item label={t('物流公司')}>
                                     {getFieldDecorator('ShipperCode', {
                                         rules: [{ required: true, message: '请选择物流公司' }],
                                     })(<Select
@@ -85,11 +88,11 @@ class Index extends Component {
                                         {options}
                                     </Select>)}
                                 </Form.Item>
-                                <Form.Item label={'物流单号'}>
+                                <Form.Item label={t('物流单号')}>
                                     {getFieldDecorator('LogisticCode', {
                                         rules: [{ required: true, message: '请输入查询的单号' }],
                                     })(<Search
-                                        enterButton="查询"
+                                        enterButton={t("查询")}
                                         size="large"
                                         onSearch={value => this.search(value)}
                                     />)}

@@ -43,7 +43,7 @@ class Facilities extends Component{
 
 
     render(){
-        console.log(this.props)
+        const {t}=this.props
         if(this.state.isloading)
         {
             return (<div id={'contents'} style={{flex:1}}><Loading /></div>)
@@ -54,7 +54,7 @@ class Facilities extends Component{
             <div>
                 <div id={'contents'} style={{flex:1, overflow:"auto",backgroundColor:"white"}}>
                     <Modal
-                        title="添加预约"
+                        title={t("添加预约")}
                         visible={this.state.visible}
                         onOk={this.handleOk}
                         confirmLoading={this.state.confirmLoading}
@@ -64,19 +64,19 @@ class Facilities extends Component{
                         <Row type="flex" justify="center" align="middle">
                             <Col span={20}>
                                 <Form labelCol={{span:5}}>
-                                    <Form.Item label='开始时间'>
+                                    <Form.Item label={t('开始时间')}>
                                         {getFieldDecorator('start', {rules: [{required: true, message: '请选择开始时间'}]})(<DatePicker showTime={{format:'YYYY-MM-DD HH:mm'}} locale={this.props.i18n.language=='zh'?zh:ja}  format='YYYY-MM-DD HH:mm'
                                                                                                    onChange={this.onDateChange}/>)}
                                     </Form.Item>
-                                    <Form.Item label='结束时间'>
+                                    <Form.Item label={t('结束时间')}>
                                         {getFieldDecorator('end', {rules: [{required: true, message: '请选择结束时间'}]})(<DatePicker showTime={{format:'YYYY-MM-DD HH:mm'}} locale={this.props.i18n.language=='zh'?zh:ja}   format='YYYY-MM-DD HH:mm'
                                                                                                    onChange={this.onDateChange}/>)}
                                     </Form.Item>
-                                    <Form.Item label='主题内容'>
+                                    <Form.Item label={t('主题内容')}>
                                         {getFieldDecorator('title', {rules: [{required: true, message: '请输入主题内容'}]})(<Input.TextArea rows={4} />)}
                                     </Form.Item>
                                     <Form.Item>
-                                        {getFieldDecorator('insertcalendar', {})(<Checkbox>写入到我的日程</Checkbox>)}
+                                        {getFieldDecorator('insertcalendar', {})(<Checkbox>{t('写入到我的日程')}</Checkbox>)}
                                     </Form.Item>
                                     <Form.Item>
                                         {getFieldDecorator('resourceId', {})(<input type={'hidden'}></input>)}{getFieldDecorator('id', {})(<input type={'hidden'}></input>)}
@@ -92,8 +92,8 @@ class Facilities extends Component{
                                onViewChange={this.onViewChange}
                                eventItemClick={this.eventClicked}
                                viewEventClick={this.ops1}
-                               viewEventText="编辑"
-                               viewEvent2Text="删除"
+                               viewEventText={t("编辑")}
+                               viewEvent2Text={t("删除")}
                                viewEvent2Click={this.ops2}
                                updateEventStart={this.updateEventStart}
                                updateEventEnd={this.updateEventEnd}

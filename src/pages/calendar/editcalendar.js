@@ -5,7 +5,7 @@ import PageHead from '../../components/pageheader'
 import moment from "moment";
 import {connect} from "react-redux";
 import WrapedCheckBox from "../../components/wrapedcheckbox";
-import { calendardel, calendaredit, getcalendardetail, getuserlist} from '../../api'
+import {calendardel, calendaredit, getcalendardetail, getrslist, getuserlist} from '../../api'
 import Loading from "../../components/loading";
 
 const {Option, OptGroup} = Select;
@@ -19,7 +19,10 @@ class Editcalendar extends Component {
             ismsg: false,
             userlist: [],
             loading:true,
-            detaildata:{}
+            detaildata:{},
+            selectedKeys: [],
+            sheshisource:[],
+            targetKeys: []
         }
     }
 
@@ -34,8 +37,13 @@ class Editcalendar extends Component {
         const detaildata=await getcalendardetail(data)
         if(detaildata.ret===200)
         {
-            this.setState({detaildata:detaildata.data.detail,cc:detaildata.data.cc,loading:false})
+            console.log('kkk',detaildata)
+            this.setState({targetKeys:detaildata.data.rlist,detaildata:detaildata.data.detail,cc:detaildata.data.cc,loading:false})
         }
+       const rslist=await getrslist();
+       if(rslist.ret===200){
+           this.setState({sheshisource:rslist.data})
+       }
     }
 
     onUseableCheckedChange = () => {
@@ -72,7 +80,7 @@ class Editcalendar extends Component {
             if (!err) {
                 const {name, startdate, starttime, enddate, endtime, title, titlecolor, content, remarks, cc, ismsg} = values
                 try {
-                    const result = await calendaredit(this.state.detaildata.id,this.props.user.id, name, startdate.format('YYYY-MM-DD'), starttime.format('HH:mm'), enddate.format('YYYY-MM-DD'), endtime.format('HH:mm'), title, titlecolor, content, remarks, cc, ismsg)
+                    const result = await calendaredit(this.state.detaildata.id,this.props.user.id, name, startdate.format('YYYY-MM-DD'), starttime.format('HH:mm'), enddate.format('YYYY-MM-DD'), endtime.format('HH:mm'), title, titlecolor, content, remarks, cc, ismsg,this.state.targetKeys)
                     if (result.ret==200) {
                         message.success('日程修改成功');
                         this.props.history.goBack()
@@ -85,10 +93,23 @@ class Editcalendar extends Component {
             console.log(values)
         })
     }
+    handleSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
+        this.setState({ selectedKeys: [...sourceSelectedKeys, ...targetSelectedKeys] });
 
+        console.log('sourceSelectedKeys: ', sourceSelectedKeys);
+        console.log('targetSelectedKeys: ', targetSelectedKeys);
+    };
+//
+    handleChange = (nextTargetKeys, direction, moveKeys) => {
+        this.setState({ targetKeys: nextTargetKeys });
+
+        console.log('targetKeys: ', nextTargetKeys);
+        console.log('direction: ', direction);
+        console.log('moveKeys: ', moveKeys);
+    };
 //
     render() {
-
+        console.log('cocoboy',this.state.targetKeys)
         const {getFieldDecorator} = this.props.form;
         if(this.state.loading)
         {
@@ -189,6 +210,26 @@ class Editcalendar extends Component {
                                 {getFieldDecorator('ismsg', {
                                     initialValue: this.state.detaildata.ismsg
                                 })(<WrapedCheckBox text='发送通知' onChange={this.onUseableCheckedChange}/>)}
+                            </Form.Item>
+                            <Form.Item  label={("设施预约")}>
+                                {getFieldDecorator('sheshi', {
+                                })(
+                                    <Transfer
+                                        dataSource={this.state.sheshisource}
+                                        titles={['可预约设施', '已选择']}
+                                        targetKeys={this.state.targetKeys}
+                                        selectedKeys={this.state.selectedKeys}
+                                        onChange={this.handleChange}
+                                        onSelectChange={this.handleSelectChange}
+                                        // onScroll={this.handleScroll}
+                                        render={item => item.name}
+                                        disabled={this.state.istime}
+                                        listStyle={{
+                                            width: 150,
+                                            height: 200,
+                                        }}
+                                    />
+                                )}
                             </Form.Item>
                             <Form.Item wrapperCol={{span: 8, offset: 11}}>
                                 <Button htmlType="submit" type="primary" htmlType="submit">

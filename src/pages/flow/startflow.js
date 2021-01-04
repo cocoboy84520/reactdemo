@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PageHead from "../../components/pageheader";
 import './startflow.less'
-import {Form, Input, Row, Col, Button, Card, Select, Icon, Upload, message} from "antd";
+import {Form, Input, Row, Col, Button, Card, Select, Icon, Upload, message,Modal} from "antd";
 import FormDesign from '../../components/formdesign';
 import {get_formdesign, getuserlist, saveflow, startflow} from "../../api";
 import {withTranslation} from 'react-i18next'
@@ -13,7 +13,7 @@ const {TextArea} = Input;
 const {FormDisplay} = FormDesign;
 const FormItem = Form.Item;
 const {Option, OptGroup} = Select;
-
+const { confirm } = Modal;
 @withTranslation()
 class FormShow extends Component {
 
@@ -22,6 +22,7 @@ class FormShow extends Component {
         this.state = {
             userlist: [],
             fileList: [],
+            loading:false
         }
     }
 
@@ -62,28 +63,36 @@ class FormShow extends Component {
 
     componentDidMount() {
         this.loaduser()
-        const a = randomNumber();
-        this.props.form.setFieldsValue({No: a})
     }
 
     handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFields(async (err, values) => {
-            for(let key  in values){
-                if(key.indexOf('dateformat_')===0)
-                {
-                    values[key]=moment(values[key]).format('YYYY-MM-DD HH:mm')
-                }
-            }
-            if (!err) {
-                    const result=await startflow(values,this.props.location.state.item.id);
-                    if(result.ret===200)
-                    {
-                        message.success('申请成功')
-                        this.props.history.push('/myflow')
+        confirm({
+            title: '询问?',
+            content: '您确定要提交申请吗？',
+            onOk:()=> {
+                this.props.form.validateFields(async (err, values) => {
+                    for(let key  in values){
+                        if(key.indexOf('dateformat_')===0)
+                        {
+                            values[key]=moment(values[key]).format('YYYY-MM-DD HH:mm')
+                        }
                     }
-            }
+                    if (!err) {
+                        const result=await startflow(values,this.props.location.state.item.id);
+                        if(result.ret===200)
+                        {
+                            message.success('申请成功')
+                            this.props.history.push('/myflow')
+                        }else{
+                            message.error(result.msg)
+                        }
+                    }
+                });
+            },
+            onCancel() {},
         });
+
     };
 
     saveflow=()=>{
@@ -114,7 +123,8 @@ class FormShow extends Component {
         console.log(this.props)
         const props = {
             name: 'upfile',
-            action: '/?s=File.upload',
+            action: '/index.php?s=File.upload',
+            method:'post',
             onChange: this.onChange,
             multiple: true,
             headers:{'Authorization':this.props.user.Token}
@@ -130,19 +140,19 @@ class FormShow extends Component {
                         <Row gutter={16}>
                             <Col lg={6} md={12} sm={24}>
                                 <Form.Item
-                                    label={'申请号'}
+                                    label={t('申请号')}
                                 >
-                                    {getFieldDecorator('No', {})(<Input placeholder="请输入申请号"/>)}
+                                    {getFieldDecorator('No', {rules: [{required: true, message: t('请输入申请号')}]})(<Input placeholder="请输入申请号"/>)}
 
                                 </Form.Item>
                             </Col>
                             <Col xl={{span: 6, offset: 2}} lg={{span: 8}} md={{span: 12}} sm={24}>
-                                <Form.Item label={'批准号'}>
+                                <Form.Item label={t('批准号')}>
                                     {getFieldDecorator('No2', {})(<Input placeholder="请输入批准号"/>)}
                                 </Form.Item>
                             </Col>
                             <Col xl={{span: 6, offset: 2}} lg={{span: 8}} md={{span: 12}} sm={24}>
-                                <Form.Item label={'申请部门'}
+                                <Form.Item label={t('申请部门')}
                                 >
                                     {getFieldDecorator('department', {
                                         initialValue: this.props.user.departname
@@ -153,7 +163,7 @@ class FormShow extends Component {
                         </Row>
                         <Row gutter={16}>
                             <Col lg={6} md={12} sm={24}>
-                                <Form.Item label={'申请人'}>
+                                <Form.Item label={t('申请人')}>
                                     {getFieldDecorator('createuser', {
                                         initialValue: this.props.user.name
                                     })(<Input disabled={true} placeholder="请输入申请人"/>)}
@@ -171,16 +181,16 @@ class FormShow extends Component {
                             </Col>
                         </Row>
                     </Card>
-                    <Card title={'申请内容'} bordered={false} headStyle={{fontWeight: '900'}} style={{marginTop: 20}}>
+                    <Card title={t('申请内容')} bordered={false} headStyle={{fontWeight: '900'}} style={{marginTop: 20}}>
                         <FormDisplay
                             fieldsData={fieldsData}
                             form={form}
                         />
                     </Card>
-                    <Card title={'附件'} bordered={false} headStyle={{fontWeight: '900'}} style={{marginTop: 20}}>
+                    <Card title={t('附件')} bordered={false} headStyle={{fontWeight: '900'}} style={{marginTop: 20}}>
                         <Row gutter={16}>
                             <Col lg={8} md={8} sm={24}>
-                                <Form.Item label={("附件")}>
+                                <Form.Item label={t("附件")}>
                                     {getFieldDecorator('files', {
                                         valuePropName:'fileList',
                                         getValueFromEvent: this.normFile
@@ -194,7 +204,7 @@ class FormShow extends Component {
                             </Col>
                         </Row>
                     </Card>
-                    <Card title={'审批方'} bordered={false} headStyle={{fontWeight: '900'}} style={{marginTop: 20}}>
+                    <Card title={t('审批方')} bordered={false} headStyle={{fontWeight: '900'}} style={{marginTop: 20}}>
                         <Row gutter={16}>
                             <Col lg={8} md={8} sm={24}>
                                 <Form.Item label={("抄送")}>
@@ -219,8 +229,8 @@ class FormShow extends Component {
                         </Row>
                         <Row gutter={16}>
                             <Col lg={16} md={16} sm={24}>
-                                <Form.Item label={'备注'}>
-                                    {getFieldDecorator('remark', {})(<TextArea rows={4} placeholder="备注"/>)}
+                                <Form.Item label={t('备注')}>
+                                    {getFieldDecorator('remark', {})(<TextArea  rows={4} placeholder="备注"/>)}
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -234,14 +244,14 @@ class FormShow extends Component {
                     marginTop: 20
                 }}>
                     <Button onClick={this.saveflow}>
-                        保存
+                        {t('保存')}
                     </Button>
                     <Button style={{marginLeft: 10}} type={'primary'} htmlType="submit">
-                        申请
+                        {t('申请')}
                     </Button>
-                    <Button style={{marginLeft: 10}} type={'danger'} htmlType="submit">
-                    撤回
-                </Button>
+                {/*    <Button style={{marginLeft: 10}} type={'danger'} htmlType="submit">*/}
+                {/*    撤回*/}
+                {/*</Button>*/}
                 </div>
                 {/*<FormItem wrapperCol={{span: 10, offset: 11}}>*/}
                 {/*    <Button htmlType="submit">*/}

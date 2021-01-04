@@ -1,7 +1,9 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next"
+import LanguageDetector from 'i18next-browser-languagedetector';
 import Zh from './locale/zh.json'
 import Jp from './locale/jp.json'
+
 // the translations
 // (tip move them in a JSON file and import them)
 const resources = {
@@ -9,7 +11,10 @@ const resources = {
     zh:Zh
 };
 
+
+
 i18n
+    .use(LanguageDetector)
     .use(initReactI18next) // passes i18n down to react-i18next
     .init({
         resources,

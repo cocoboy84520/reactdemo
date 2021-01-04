@@ -9,7 +9,9 @@ import {logout} from "../../redux/actions";
 @withTranslation()
 class Index extends Component {
 
-     langmenu=()=> {
+
+
+    langmenu=()=> {
          return (
              <Menu>
                  <Menu.Item className='menuitem'>

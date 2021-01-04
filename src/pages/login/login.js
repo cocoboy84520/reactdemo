@@ -9,6 +9,7 @@ import {connect} from 'react-redux'
 import {userlogin,wxlogin} from '../../redux/actions'
 import queryString from 'query-string'
 import {loginwithwx} from "../../api";
+import detectBrowserLanguage from "detect-browser-language";
 const {Option} = Select;
 // require('@babel/plugin-proposal-decorators').default,
 //     { "legacy":true, },
@@ -58,7 +59,7 @@ class Login extends Component {
             "id" : "qrcode",
             "appid" : "ww18011af482c08ca9",
             "agentid" : "1000003",
-            "redirect_uri" :"http://122.225.145.62/login",
+            "redirect_uri" :"http://kanken.51bibitao.com/login",
             "state" : "123456",
             "href" : "",
         });
@@ -66,7 +67,6 @@ class Login extends Component {
 
     //切换语言
     changelang = (lang) => {
-        console.log(this.props.i18n)
         this.props.i18n.changeLanguage(lang);
     }
 
@@ -76,6 +76,17 @@ class Login extends Component {
 
     handleCancel=()=>{
         this.setState({ModelVisible:false})
+    }
+
+    componentDidMount=()=> {
+        let lng=detectBrowserLanguage()
+        let lngstr='zh'
+        if(lng.indexOf('ja')>=0)
+        {
+            lngstr='jp'
+        }
+        console.log(lngstr)
+        this.props.i18n.changeLanguage(lngstr);
     }
 
     render() {
@@ -153,7 +164,7 @@ class Login extends Component {
                     closable={false}
                 >
                     <div style={{display:"flex",justifyContent:"center",alignItems:"center"}} id={'qrcode'}>
-                        <iframe  src="https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=ww18011af482c08ca9&agentid=1000003&redirect_uri=http://122.225.145.62/login&state=123456&login_type=jssdk" frameBorder="0" scrolling="no" width="300px" height="400px"></iframe>
+                        <iframe  src="https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=ww18011af482c08ca9&agentid=1000003&redirect_uri=http://kanken.51bibitao.com/login&state=123456&login_type=jssdk" frameBorder="0" scrolling="no" width="300px" height="400px"></iframe>
                     </div>
                 </Modal>
             </div>

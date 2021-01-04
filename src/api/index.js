@@ -10,10 +10,10 @@ export const reqlogin=(username,password)=>ajax('/index.php?s=User.login',{usern
 
 export const reqgetcalendar=(startdate,enddate)=>ajax('/index.php?s=Calendar.getlist',{startdate,enddate},'POST')
 
-export const calendaradd=(userid,name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg)=>ajax('/index.php?s=Calendar.add',{userid,name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg},'POST')
+export const calendaradd=(userid,name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg,targetKeys)=>ajax('/index.php?s=Calendar.add',{userid,name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg,targetKeys},'POST')
 
 //编辑日程
-export const calendaredit=(id,userid,name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg)=>ajax('/index.php?s=Calendar.edit',{id,userid,name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg},'POST')
+export const calendaredit=(id,userid,name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg,targetKeys)=>ajax('/index.php?s=Calendar.edit',{id,userid,name,startdate,starttime,enddate,endtime,title,titlecolor,content,remarks,cc,ismsg,targetKeys},'POST')
 
 //删除日程
 export const calendardel=(id)=>ajax('/index.php?s=Calendar.del',{id},'POST')
@@ -28,7 +28,7 @@ export const getuserlist=()=>ajax('/index.php?s=User.getuser',{},'POST')
 export const addnotice=(title,titlecolor,type,content,files)=>ajax('/index.php?s=Notice.add',{title,titlecolor,type,content,files},'POST')
 
 //显示公告
-export const noticelist=()=>ajax('/index.php?s=Notice.querylist',{},'POST')
+export const noticelist=(title,content,createuser,createtime)=>ajax('/index.php?s=Notice.querylist',{title,content,createuser,createtime},'POST')
 
 //删除公告
 export const noticedel=(id)=>ajax('/index.php?s=Notice.del',{id},'POST')
@@ -91,7 +91,7 @@ export const getflowdetail=(wf_id)=>ajax('/index.php?s=Workflow.flowdetail',{wf_
 export const geteditinfo=(wf_id)=>ajax('/index.php?s=Workflow.geteditinfo',{wf_id},'POST')
 
 //流程审批
-export const dochecksave=(wf_fid,submit_to_save,remark,wf_backflow)=>ajax('/index.php?s=Workflow.do_check_save',{wf_fid,submit_to_save,remark,wf_backflow},'POST')
+export const dochecksave=(wf_fid,submit_to_save,remark,wf_backflow,singuser)=>ajax('/index.php?s=Workflow.do_check_save',{wf_fid,submit_to_save,remark,wf_backflow,singuser},'POST')
 
 //添加用户
 export const adduser=(username,name,email,mobile,departmentid,backupmobile,password)=>ajax('/index.php?s=User.add',{username,name,email,mobile,departmentid,backupmobile,password},'POST')
@@ -140,3 +140,23 @@ export const delFacilities=(id)=>ajax('/index.php?s=Resource.del',id,'POST')
 
 //首页信息
 export const gethome=()=>ajax('/index.php?s=Home.index',{},'POST')
+
+//获取通知详情
+export const getnoticedetail=(id)=>ajax('/index.php?s=Notice.show',{id},'POST')
+
+//编辑通知
+export const editnotice=(id)=>ajax('/index.php?s=Notice.getdetail',{id},'POST')
+
+//获取审批委托记录
+export const  getentrustlist=()=>ajax('/index.php?s=Entrust.querylist',{},'POST')
+
+//添加委托
+export const  addentrust=(type,entrustuser,startdate,enddate)=>ajax('/index.php?s=Entrust.add',{type,entrustuser,startdate,enddate},'POST')
+
+//删除委托
+export const delentrust=(id)=>ajax('/index.php?s=Entrust.del',{id},'POST')
+
+//撤回申请
+export const backflow=(flowid)=>ajax('/index.php?s=Workflow.backflow',{flowid},'POST')
+
+export const getrslist=()=>ajax('/index.php?s=resource.rslist',{},'POST')

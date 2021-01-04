@@ -6,81 +6,13 @@ import PageHead from "../../components/pageheader";
 import {connect} from "react-redux";
 import {calendardel, getmyflow, getuserlist, noticedel, noticelist} from "../../api";
 import moment from 'moment';
+import {withTranslation} from "react-i18next";
 
 const ButtonGroup = Button.Group;
 const {Option, OptGroup} = Select;
-const columns = [
-    {
-        title: '申请时间',
-        dataIndex: 'add_time',
-        width: 100,
-        render: (text, record, index) => {
-            return moment(parseInt(text) * 1000).format("YYYY-MM-DD HH:mm");
-        }
-    }, {
-        title: '申请号',
-        dataIndex: 'No',
-        width: 100,
-        render:(text,record,index)=>{
-            if(record.status===0)
-            {
-                 return <Link to={{pathname: '/myflow/editflow', state: {wf_id: record.id}}}>{text}</Link>
-            }else {
-                return <Link to={{pathname: '/myflow/flowview', state: {wf_id: record.id}}}>{text}</Link>
-            }
-        }
-    },
-    {
-        title: '标题',
-        dataIndex: 'new_title',
-        width: 200,
-        render:(text,record,index)=>{
-            if(record.status===0)
-            {
-                return <Link to={{pathname: '/myflow/editflow', state: {wf_id: record.id}}}>{text}</Link>
-            }else {
-                return <Link to={{pathname: '/myflow/flowview', state: {wf_id: record.id}}}>{text}</Link>
-            }
-        }
-    },
-    {
-        title: '申请人',
-        dataIndex: 'username',
-        width: 100
-    },
-    {
-        title: '审批人',
-        dataIndex: 'name',
-        width: 100
-    },
-    {
-        title: '状态',
-        dataIndex: 'status',
-        width: 100,
-        render: (text, record, index) => {
-
-            switch (text) {
-                case 0:
-                    return <Tag color="#808080">保存中</Tag>
-                    break;
-                case 1:
-                    return <Tag color="#FF8C00">待审批</Tag>;
-                    ;
-                    break;
-                case 2:
-                    return <Tag color="#008000">审批通过</Tag>;
-                    break;
-                case -1:
-                    return <Tag color="#FF0000">驳回</Tag>;
-                    break;
-
-            }
-        }
-    },
-
-];
 
 
+@withTranslation()
 class Myflowlist extends Component {
 
 
@@ -158,50 +90,121 @@ class Myflowlist extends Component {
             hideDefaultSelections: true,
         };
         const {getFieldDecorator} = this.props.form;
+        const {t} =this.props
+        const columns = [
+            {
+                title: t('申请时间'),
+                dataIndex: 'add_time',
+                width: 100,
+                render: (text, record, index) => {
+                    return moment(parseInt(text) * 1000).format("YYYY-MM-DD HH:mm");
+                }
+            }, {
+                title: t('申请号'),
+                dataIndex: 'No',
+                width: 100,
+                render:(text,record,index)=>{
+                    if(record.status===0)
+                    {
+                        return <Link to={{pathname: '/myflow/editflow', state: {wf_id: record.id}}}>{text}</Link>
+                    }else {
+                        return <Link to={{pathname: '/myflow/flowview', state: {wf_id: record.id}}}>{text}</Link>
+                    }
+                }
+            },
+            {
+                title: t('标题'),
+                dataIndex: 'new_title',
+                width: 200,
+                render:(text,record,index)=>{
+                    if(record.status===0)
+                    {
+                        return <Link to={{pathname: '/myflow/editflow', state: {wf_id: record.id}}}>{text}</Link>
+                    }else {
+                        return <Link to={{pathname: '/myflow/flowview', state: {wf_id: record.id}}}>{text}</Link>
+                    }
+                }
+            },
+            {
+                title: t('申请人'),
+                dataIndex: 'username',
+                width: 100
+            },
+            {
+                title: t('审批人'),
+                dataIndex: 'name',
+                width: 100
+            },
+            {
+                title:t('状态'),
+                dataIndex: 'status',
+                width: 100,
+                render: (text, record, index) => {
+
+                    switch (text) {
+                        case 0:
+                            return <Tag color="#808080">{t('保存中')}</Tag>
+                            break;
+                        case 1:
+                            return <Tag color="#FF8C00">{t('待审批')}</Tag>;
+                            ;
+                            break;
+                        case 2:
+                            return <Tag color="#008000">{t('审批通过')}</Tag>;
+                            break;
+                        case -1:
+                            return <Tag color="#FF0000">{t('驳回')}</Tag>;
+                            break;
+
+                    }
+                }
+            },
+
+        ];
         return (
             <div>
                 <PageHead/>
                 <Form className="ant-advanced-search-form" onSubmit={this.handleSearch}>
                     <Row gutter={24}>
                         <Col span={6}>
-                            <Form.Item label='申请日期'>
+                            <Form.Item label={t('申请时间')}>
                                 {getFieldDecorator('add_time', {})(<DatePicker.RangePicker format='YYYY-MM-DD'
                                                                                            onChange={this.onDateChange}/>)}
                             </Form.Item>
                         </Col>
                         <Col span={4}>
-                            <Form.Item label='状态'>
-                                {getFieldDecorator('status', {})(<Select>
-                                    <Option value="0">保存中</Option>
-                                    <Option value="1">待审批</Option>
-                                    <Option value="2">已批准</Option>
-                                    <Option value="-1">已驳回</Option>
+                            <Form.Item label={t('状态')}>
+                                {getFieldDecorator('status', {})(<Select allowClear={true}>
+                                    <Option value="0">{t('保存中')}</Option>
+                                    <Option value="1">{t('待审批')}</Option>
+                                    <Option value="2">{t('已批准')}</Option>
+                                    <Option value="-1">{t('已驳回')}</Option>
                                 </Select>)}
                             </Form.Item>
                         </Col>
                         <Col span={6}>
-                            <Form.Item label='申请号码'>
+                            <Form.Item label={t('申请号')}>
                                 {getFieldDecorator('No', {})(<Input/>)}
                             </Form.Item>
                         </Col>
                         <Col span={6}>
-                            <Form.Item label='批准号码'>
+                            <Form.Item label={t('批准号码')}>
                                 {getFieldDecorator('No2', {})(<Input/>)}
                             </Form.Item>
                         </Col>
                     </Row>
                     <Row gutter={24}>
                         <Col span={10}>
-                            <Form.Item label='标题'>
+                            <Form.Item label={t('标题')}>
                                 {getFieldDecorator('new_title', {})(<Input/>)}
                             </Form.Item>
                         </Col>
                         <Col span={4}>
                             <Button type="primary" htmlType="submit">
-                                查找
+                                {t('查找')}
                             </Button>
                             <Button style={{marginLeft: 8}} onClick={this.handleReset}>
-                                清除
+                                {t('清除')}
                             </Button>
                         </Col>
                     </Row>

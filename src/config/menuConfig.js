@@ -28,7 +28,7 @@ const menuList = [
             key: '/newflow',
             icon: 'plus-circle'
         }, {
-            title: '我的申请',
+            title: '申请记录',
             key: '/myflow',
             icon: 'key'
         },
@@ -38,10 +38,10 @@ const menuList = [
                 icon: 'key'
             },
             {
-            title: '流程管理',
-            key: '/flowadmin',
-            icon: 'key'
-        }
+                title: '流程管理',
+                key: '/flowadmin',
+                icon: 'key'
+            }
         ]
     }, {
         title: '常用工具',
